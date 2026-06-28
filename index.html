@@ -37,24 +37,25 @@
   .app{min-height:100dvh;display:flex;flex-direction:column;}
   .view{flex:1;display:none;flex-direction:column;}
   .view.is-active{display:flex;}
+  #kiosk.is-active{height:100dvh;overflow:hidden;}
 
   /* ---------- brand header ---------- */
   .brand{
     display:flex;flex-direction:column;align-items:center;gap:6px;
-    padding:clamp(18px,3.4vw,34px) 20px 4px;
+    padding:clamp(10px,2.2vh,30px) 20px clamp(2px,0.6vh,6px);
   }
-  .logo{height:clamp(74px,12.5vw,116px);width:auto;display:block;}
+  .logo{height:clamp(50px,8.6vh,108px);width:auto;display:block;}
   .confirm .logo-confirm{height:clamp(96px,17vw,150px);}
 
   /* ---------- greeting ---------- */
   .greet-wrap{
     text-align:center;
-    padding:clamp(10px,2.4vw,26px) 20px clamp(6px,1.6vw,14px);
-    min-height:clamp(96px,15vw,150px);
-    display:flex;flex-direction:column;justify-content:center;align-items:center;gap:6px;
+    padding:clamp(4px,1.4vh,20px) 20px clamp(2px,0.8vh,12px);
+    min-height:auto;
+    display:flex;flex-direction:column;justify-content:center;align-items:center;gap:clamp(2px,0.6vh,8px);
   }
   .greet{
-    font-size:clamp(46px,8.6vw,108px);
+    font-size:clamp(38px,7vh,100px);
     line-height:.96;
     color:var(--ink);
     transition:opacity .6s ease, transform .6s ease;
@@ -81,10 +82,10 @@
     flex:1;
     display:grid;
     grid-template-columns:1fr;
-    gap:clamp(18px,3vw,34px);
-    align-content:start;justify-items:center;
+    gap:clamp(14px,2.6vw,32px);
+    align-content:center;justify-items:center;
     width:100%;max-width:960px;margin:0 auto;
-    padding:clamp(6px,1.4vw,14px) clamp(20px,4vw,40px) clamp(28px,4vw,46px);
+    padding:clamp(4px,1vh,14px) clamp(20px,4vw,40px) clamp(10px,2vh,26px);
   }
   @media(min-width:860px){
     .kiosk-body{grid-template-columns:minmax(280px,1fr) minmax(280px,1.05fr);align-items:start;}
@@ -125,15 +126,15 @@
 
   /* display */
   .display{
-    height:clamp(72px,11vw,96px);
+    height:clamp(58px,8.4vh,96px);
     border:1.5px solid var(--ink);
     border-radius:4px;
     display:flex;align-items:center;justify-content:center;
-    font-size:clamp(40px,7vw,64px);
+    font-size:clamp(34px,6vh,64px);
     letter-spacing:.18em;text-indent:.18em;
     color:var(--ink);
     background:var(--white);
-    margin-bottom:clamp(12px,1.8vw,18px);
+    margin-bottom:clamp(10px,1.6vh,18px);
     position:relative;
     transition:border-color .2s ease;
   }
@@ -147,13 +148,13 @@
   @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-7px)}40%{transform:translateX(7px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
 
   /* keypad */
-  .keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(8px,1.4vw,14px);}
+  .keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(8px,1.4vh,14px);}
   .key{
-    height:clamp(58px,9.4vw,84px);
+    height:clamp(46px,8vh,84px);
     border:1px solid var(--line);
     border-radius:4px;
     background:var(--white);
-    font-size:clamp(26px,4.4vw,38px);
+    font-size:clamp(24px,4.6vh,38px);
     color:var(--ink);
     display:flex;align-items:center;justify-content:center;
     transition:transform .08s ease, background .15s ease, border-color .15s ease, color .15s ease;
@@ -170,8 +171,8 @@
     border:1px solid var(--line);
     border-radius:6px;
     background:var(--white);
-    padding:clamp(12px,2vw,20px) 6px clamp(10px,1.6vw,14px);
-    display:flex;flex-direction:column;align-items:center;gap:8px;
+    padding:clamp(8px,1.6vh,20px) 6px clamp(8px,1.2vh,14px);
+    display:flex;flex-direction:column;align-items:center;gap:clamp(4px,1vh,8px);
     transition:transform .1s ease, border-color .2s ease, background .2s ease;
   }
   .person:hover{border-color:var(--line-gold);}
@@ -180,22 +181,22 @@
   .people.hint{animation:shake .4s;}
 
   /* tasto invio */
-  .send-row{grid-column:1/-1;display:flex;justify-content:center;margin-top:clamp(8px,1.6vw,18px);}
+  .send-row{grid-column:1/-1;display:flex;justify-content:center;margin-top:clamp(6px,1.4vh,18px);}
   .send{
-    width:clamp(150px,32vw,240px);height:clamp(64px,10vw,86px);
+    width:clamp(150px,30vw,240px);height:clamp(54px,8vh,86px);
     border:1.5px solid var(--line);border-radius:999px;background:var(--white);
     color:rgba(22,20,15,.28);
     display:flex;align-items:center;justify-content:center;
     transition:transform .1s ease, background .2s ease, border-color .2s ease, color .2s ease, box-shadow .2s ease;
   }
-  .send svg{width:clamp(40px,7vw,56px);height:auto;}
+  .send svg{width:clamp(38px,6vh,56px);height:auto;}
   .send.ready{border-color:var(--gold);color:var(--gold);box-shadow:var(--shadow);}
   .send.ready:hover{background:var(--gold);color:var(--white);}
   .send:active{transform:translateY(2px);}
   .send.ready:active{background:var(--gold);color:var(--white);border-color:var(--gold);}
-  .figs{display:flex;align-items:flex-end;justify-content:center;gap:2px;height:clamp(34px,5vw,46px);color:var(--ink);}
+  .figs{display:flex;align-items:flex-end;justify-content:center;gap:2px;height:clamp(28px,4.4vh,46px);color:var(--ink);}
   .figs svg{height:100%;width:auto;}
-  .person .count{font-family:'Lato',sans-serif;font-weight:900;font-size:clamp(40px,6.4vw,60px);color:var(--ink);line-height:1;}
+  .person .count{font-family:'Lato',sans-serif;font-weight:900;font-size:clamp(34px,5.6vh,60px);color:var(--ink);line-height:1;}
   .person .cap{font-family:'Lato',sans-serif;font-weight:700;font-size:clamp(11px,1.4vw,14px);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);}
 
   /* ---------- confirmation overlay ---------- */
@@ -398,33 +399,59 @@
   <button id="swDash">Sala</button>
 </div>
 
-<script>
-(function(){
+<script type="module">
   "use strict";
 
-  /* ---------- storage (condiviso tra i due dispositivi) ---------- */
-  var mem = {};
-  var store = {
-    get: async function(k){
-      if(window.storage){ try{ return await window.storage.get(k,true);}catch(e){ return null; } }
-      return (k in mem)?{value:mem[k]}:null;
-    },
-    set: async function(k,v){
-      if(window.storage){ try{ return await window.storage.set(k,v,true);}catch(e){ return null; } }
-      mem[k]=v; return {value:v};
-    }
+  /* =====================================================================
+     FIREBASE — banca dati condivisa in tempo reale
+     ⚠️  databaseURL: incolla l'URL ESATTO che vedi in cima alla pagina
+         "Realtime Database" della console Firebase. Se il tuo database è
+         in Europa l'URL finisce con ".europe-west1.firebasedatabase.app",
+         se è negli USA con ".firebaseio.com".
+     ===================================================================== */
+  const firebaseConfig = {
+    apiKey: "AIzaSyBYWgTibQTi1uvvEj2-FLICMfmppYA2cio",
+    authDomain: "colazionisas.firebaseapp.com",
+    databaseURL: "https://colazionisas-default-rtdb.europe-west1.firebasedatabase.app", // ⬅️ VERIFICA / SOSTITUISCI
+    projectId: "colazionisas",
+    storageBucket: "colazionisas.firebasestorage.app",
+    messagingSenderId: "803123309442",
+    appId: "1:803123309442:web:ba44c48e9fa0636afcbd9b"
   };
+
+  // Livello dati: Firebase se disponibile, altrimenti memoria locale (anteprima/offline).
+  let Data;
+  try {
+    const { initializeApp } = await import("https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js");
+    const { getDatabase, ref, push, onValue, remove } = await import("https://www.gstatic.com/firebasejs/12.15.0/firebase-database.js");
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    Data = {
+      online:true,
+      add:(key,e)=>push(ref(db,'entries/'+key), e),
+      watch:(key,cb)=>onValue(ref(db,'entries/'+key), function(s){
+        const v=s.val()||{};
+        const arr=Object.keys(v).map(function(k){return v[k];}).filter(Boolean).sort(function(a,b){return (a.ts||0)-(b.ts||0);});
+        cb(arr);
+      }),
+      clear:(key)=>remove(ref(db,'entries/'+key))
+    };
+  } catch(err){
+    console.warn('Firebase non disponibile — modalità locale (solo questo dispositivo).', err);
+    const mem={}, subs={};
+    const notify=function(k){(subs[k]||[]).forEach(function(cb){cb((mem[k]||[]).slice());});};
+    Data = {
+      online:false,
+      add:function(key,e){(mem[key]=mem[key]||[]).push(e);notify(key);return Promise.resolve();},
+      watch:function(key,cb){(subs[key]=subs[key]||[]).push(cb);cb((mem[key]||[]).slice());return function(){};},
+      clear:function(key){mem[key]=[];notify(key);return Promise.resolve();}
+    };
+  }
+
   function todayKey(){
     var d=new Date();
-    var k=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
-    return 'colazioni:'+k;
+    return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
   }
-  async function readToday(){
-    var r=await store.get(todayKey());
-    if(r&&r.value){ try{ return JSON.parse(r.value);}catch(e){ return []; } }
-    return [];
-  }
-  async function writeToday(arr){ await store.set(todayKey(), JSON.stringify(arr)); }
 
   /* ---------- saluto multilingue ---------- */
   var greetings=[
@@ -509,9 +536,7 @@
     if(!selectedPeople){ peopleEl.classList.add('hint'); setTimeout(function(){peopleEl.classList.remove('hint');},500); return; }
     var people=selectedPeople;
 
-    var arr=await readToday();
-    arr.push({room:room, people:people, ts:Date.now()});
-    await writeToday(arr);
+    await Data.add(todayKey(), {room:room, people:people, ts:Date.now()});
 
     confirmDetail.textContent='Stanza '+room+' · '+people+(people===1?' persona':' persone');
     confirmEl.classList.add('show');
@@ -531,10 +556,10 @@
 
   function fmtTime(ts){ var d=new Date(ts); return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'); }
 
-  async function renderDash(){
+  function renderDash(arr){
+    arr = arr || [];
     var d=new Date();
     dashDate.textContent=d.toLocaleDateString('it-IT',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
-    var arr=await readToday();
     var total=arr.reduce(function(s,e){return s+e.people;},0);
     var rooms={}; arr.forEach(function(e){rooms[e.room]=true;});
     totalNum.textContent=total;
@@ -557,26 +582,30 @@
   document.getElementById('resetBtn').addEventListener('click',function(){ ask.classList.add('show'); });
   document.getElementById('askNo').addEventListener('click',function(){ ask.classList.remove('show'); });
   document.getElementById('askYes').addEventListener('click',async function(){
-    await writeToday([]); ask.classList.remove('show'); renderDash();
+    await Data.clear(todayKey()); ask.classList.remove('show');
   });
 
   /* ---------- switch viste ---------- */
   var kioskView=document.getElementById('kiosk'), dashView=document.getElementById('dashboard');
   var swK=document.getElementById('swKiosk'), swD=document.getElementById('swDash');
-  var pollTimer=null;
+  var unwatch=null;
   function show(view){
     if(view==='dash'){
       kioskView.classList.remove('is-active'); dashView.classList.add('is-active');
       swD.classList.add('on'); swK.classList.remove('on');
-      renderDash(); pollTimer=setInterval(renderDash,3000);
+      renderDash([]);
+      if(unwatch) unwatch();
+      unwatch=Data.watch(todayKey(), function(arr){ renderDash(arr); });
     } else {
       dashView.classList.remove('is-active'); kioskView.classList.add('is-active');
       swK.classList.add('on'); swD.classList.remove('on');
-      clearInterval(pollTimer);
+      if(unwatch){ unwatch(); unwatch=null; }
     }
   }
-  swK.addEventListener('click',function(){ show('kiosk'); });
-  swD.addEventListener('click',function(){ show('dash'); });
+  swK.addEventListener('click',function(){ show('kiosk'); location.hash=''; });
+  swD.addEventListener('click',function(){ show('dash'); location.hash='sala'; });
+  // Apri direttamente la vista sala con URL che termina in #sala
+  if(/sala|dash/i.test(location.hash)) show('dash');
 
   /* ---------- schermo intero ---------- */
   var fsBtn=document.getElementById('fsBtn');
@@ -596,7 +625,6 @@
   document.addEventListener('webkitfullscreenchange',syncFs);
 
   renderDisplay();
-})();
 </script>
 </body>
 </html>
