@@ -180,6 +180,22 @@
   .person:active,.person.flash{transform:translateY(2px);border-color:var(--gold);background:var(--sand);}
   .person.selected{border-color:var(--gold);background:var(--sand);box-shadow:inset 0 0 0 1px var(--gold);}
   .people.hint{animation:shake .4s;}
+  .person.disabled{opacity:.3;pointer-events:none;}
+
+  .room-status{
+    text-align:center;min-height:1.2em;
+    margin:-6px 0 clamp(8px,1.4vh,16px);
+    font-family:'Lato',sans-serif;font-size:clamp(13px,1.7vh,17px);
+    letter-spacing:.02em;color:var(--ink-soft);
+    transition:color .2s ease;
+  }
+  .room-status b{color:var(--ink);font-weight:700;}
+  .room-status.full{color:var(--gold);}
+  .room-status.full b{color:var(--gold);}
+  .room-status.error{color:#cc2b2b;font-weight:700;}
+  .room-status.error b{color:#cc2b2b;}
+  .display.bad{border-color:#cc2b2b;}
+  .room-status.shake{animation:shake .4s;}
 
   /* tasto invio */
   .send-row{grid-column:1/-1;display:flex;justify-content:center;margin-top:clamp(6px,1.4vh,18px);}
@@ -230,6 +246,7 @@
   .log{list-style:none;margin:0;padding:0;overflow:auto;flex:1;min-height:80px;}
   .log li{display:flex;align-items:center;justify-content:space-between;padding:13px 4px;border-bottom:1px solid var(--line);font-size:clamp(15px,2vw,18px);}
   .log .room{letter-spacing:.06em;}
+  .log .flag{display:inline-block;margin-left:8px;font-size:.62em;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);border:1px solid var(--line-gold);border-radius:20px;padding:2px 8px;vertical-align:middle;}
   .log .ppl{color:var(--gold);letter-spacing:.08em;}
   .log .time{color:var(--ink-soft);font-size:.8em;letter-spacing:.06em;min-width:54px;text-align:right;}
   .log-empty{padding:30px 4px;text-align:center;color:rgba(22,20,15,.4);font-size:16px;letter-spacing:.04em;}
@@ -289,6 +306,7 @@
       <div class="panel">
         <div class="panel-label room">Room nr.</div>
         <div class="display" id="display"><span class="placeholder">— — —</span></div>
+        <div class="room-status" id="roomStatus" aria-live="polite"></div>
         <div class="keypad" id="keypad">
           <button class="key" data-k="1">1</button>
           <button class="key" data-k="2">2</button>
@@ -384,6 +402,17 @@
   </div>
 </div>
 
+<!-- conferma stanza non in elenco -->
+<div class="ask" id="askRoom">
+  <div class="ask-box">
+    <p>Stanza <b id="askRoomNr"></b> non in elenco.<br><span class="small">Vuoi confermare comunque?</span></p>
+    <div class="ask-actions">
+      <button class="btn-ghost" id="askRoomFix">Correggi</button>
+      <button class="btn-solid" id="askRoomOk">Conferma</button>
+    </div>
+  </div>
+</div>
+
 <!-- schermo intero -->
 <button class="fs" id="fsBtn" aria-label="Schermo intero">
   <svg class="ic-expand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -454,6 +483,26 @@
     return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
   }
 
+  /* =====================================================================
+     STANZE E LETTI
+     Per ogni stanza indica il numero massimo di letti (persone).
+     Gli ospiti possono presentarsi anche uno alla volta: l'app somma
+     gli arrivi della stessa stanza nella giornata e non supera questo
+     massimo. Chi digita una stanza non in elenco può confermare comunque.
+     Modifica gli intervalli e le eccezioni qui sotto.
+     ===================================================================== */
+  const LETTI = {};
+  function setLetti(a,b,n){ for(var i=a;i<=b;i++) LETTI[String(i)]=n; }
+  setLetti(101,114,2);   // piano 1 — doppie
+  setLetti(201,214,2);   // piano 2 — doppie
+  setLetti(301,314,2);   // piano 3 — doppie
+  setLetti(401,410,2);   // piano 4 — doppie
+  // eccezioni (stanza: numero letti) — singole, triple, quadruple:
+  Object.assign(LETTI, { '112':4, '291':4, '208':3, '305':3, '308':4 });
+
+  function stanzaValida(n){ return Object.prototype.hasOwnProperty.call(LETTI,String(n)); }
+  function lettiStanza(n){ return LETTI[String(n)]||0; }
+
   /* ---------- saluto multilingue ---------- */
   var greetings=[
     {t:'Buongiorno',l:'italiano'},
@@ -508,12 +557,68 @@
     if(k==='clear'){ room=''; }
     else if(k==='back'){ room=room.slice(0,-1); }
     else if(room.length<4){ room+=k; }
-    renderDisplay(); updateSend();
+    renderDisplay(); refreshRoomStatus();
   });
 
   /* ---------- selezione persone + invio ---------- */
   var confirmEl=document.getElementById('confirm'), confirmDetail=document.getElementById('confirmDetail');
   var confirmTimer=null, selectedPeople=null, sendBtn=document.getElementById('sendBtn');
+  var roomStatusEl=document.getElementById('roomStatus');
+  var todayEntries=[];
+
+  function roomInfo(r){
+    var max=lettiStanza(r);
+    var usati=todayEntries.reduce(function(s,e){ return s+(String(e.room)===String(r)?(e.people||0):0); },0);
+    return { max:max, usati:usati, restano: max>0?Math.max(0,max-usati):Infinity, known:max>0 };
+  }
+  function applyPeopleLimit(limit){
+    Array.prototype.forEach.call(peopleEl.children,function(btn){
+      var n=parseInt(btn.dataset.n,10);
+      var off=n>limit;
+      btn.classList.toggle('disabled',off);
+      btn.disabled=off;
+    });
+    if(selectedPeople && selectedPeople>limit) clearSelection();
+  }
+  function isPrefixOfValid(s){
+    if(s==='') return true;
+    for(var k in LETTI){ if(Object.prototype.hasOwnProperty.call(LETTI,k) && k.indexOf(s)===0) return true; }
+    return false;
+  }
+  var roomBad=false;
+  function refreshRoomStatus(){
+    roomStatusEl.classList.remove('full','error');
+    dispEl.classList.remove('bad');
+
+    if(room==='' || (!stanzaValida(room) && isPrefixOfValid(room))){
+      roomStatusEl.textContent=''; roomBad=false; applyPeopleLimit(Infinity); updateSend(); return;
+    }
+
+    if(!stanzaValida(room)){
+      roomStatusEl.innerHTML='Stanza <b>'+room+'</b> non esistente · digita il numero giusto';
+      roomStatusEl.classList.add('error');
+      dispEl.classList.add('bad');
+      if(!roomBad){
+        roomStatusEl.classList.add('shake');
+        setTimeout(function(){ roomStatusEl.classList.remove('shake'); },450);
+      }
+      roomBad=true;
+      applyPeopleLimit(Infinity); updateSend(); return;
+    }
+
+    roomBad=false;
+    var info=roomInfo(room);
+    if(info.restano<=0){
+      roomStatusEl.innerHTML='Stanza <b>al completo</b> · '+info.usati+'/'+info.max;
+      roomStatusEl.classList.add('full');
+    } else if(info.usati>0){
+      roomStatusEl.innerHTML='Già entrati <b>'+info.usati+'</b> di '+info.max+' · restano <b>'+info.restano+'</b>';
+    } else {
+      roomStatusEl.innerHTML='<b>'+info.max+'</b>'+(info.max===1?' letto':' letti')+' · nessuno ancora entrato';
+    }
+    applyPeopleLimit(info.restano);
+    updateSend();
+  }
 
   function updateSend(){
     if(room!=='' && selectedPeople){ sendBtn.classList.add('ready'); }
@@ -532,19 +637,52 @@
     updateSend();
   });
 
-  sendBtn.addEventListener('click',async function(){
-    if(room===''){ dispEl.classList.add('error'); return; }
-    if(!selectedPeople){ peopleEl.classList.add('hint'); setTimeout(function(){peopleEl.classList.remove('hint');},500); return; }
-    var people=selectedPeople;
-
-    await Data.add(todayKey(), {room:room, people:people, ts:Date.now()});
-
-    confirmDetail.textContent='Stanza '+room+' · '+people+(people===1?' persona':' persone');
+  async function registra(roomVal, people, override){
+    var rec={room:roomVal, people:people, ts:Date.now()};
+    if(override) rec.override=true;
+    await Data.add(todayKey(), rec);
+    var msg='Stanza '+roomVal+' · '+people+(people===1?' persona':' persone');
+    var max=lettiStanza(roomVal);
+    if(max>0){
+      var prima=todayEntries.reduce(function(s,e){ return s+(String(e.room)===String(roomVal)?(e.people||0):0); },0);
+      msg+=' · '+Math.min(prima+people,max)+'/'+max;
+    }
+    confirmDetail.textContent=msg;
     confirmEl.classList.add('show');
-
-    room=''; clearSelection(); renderDisplay(); updateSend();
+    room=''; clearSelection(); renderDisplay(); refreshRoomStatus();
     clearTimeout(confirmTimer);
     confirmTimer=setTimeout(function(){ confirmEl.classList.remove('show'); },3200);
+  }
+
+  var askRoom=document.getElementById('askRoom'),
+      askRoomNr=document.getElementById('askRoomNr'),
+      pending=null;
+
+  sendBtn.addEventListener('click',function(){
+    if(room===''){ dispEl.classList.add('error'); return; }
+    if(stanzaValida(room)){
+      var info=roomInfo(room);
+      if(info.restano<=0){
+        roomStatusEl.classList.add('shake');
+        setTimeout(function(){ roomStatusEl.classList.remove('shake'); },450);
+        return;
+      }
+    }
+    if(!selectedPeople){ peopleEl.classList.add('hint'); setTimeout(function(){peopleEl.classList.remove('hint');},500); return; }
+    if(stanzaValida(room)){
+      var info2=roomInfo(room);
+      if(selectedPeople>info2.restano){ refreshRoomStatus(); return; }
+      registra(room, selectedPeople, false);
+      return;
+    }
+    askRoomNr.textContent=room;
+    pending={room:room, people:selectedPeople};
+    askRoom.classList.add('show');
+  });
+  document.getElementById('askRoomFix').addEventListener('click',function(){ askRoom.classList.remove('show'); pending=null; });
+  document.getElementById('askRoomOk').addEventListener('click',function(){
+    askRoom.classList.remove('show');
+    if(pending){ registra(pending.room, pending.people, true); pending=null; }
   });
   confirmEl.addEventListener('click',function(){ confirmEl.classList.remove('show'); clearTimeout(confirmTimer); });
 
@@ -570,7 +708,7 @@
       logEl.innerHTML='<li class="log-empty">Ancora nessun ingresso oggi</li>';
     } else {
       var rows=arr.slice().reverse().map(function(e){
-        return '<li><span class="room">Stanza '+e.room+'</span>'+
+        return '<li><span class="room">Stanza '+e.room+(e.override?' <span class="flag">fuori elenco</span>':'')+'</span>'+
                '<span class="ppl">'+e.people+(e.people===1?' persona':' persone')+'</span>'+
                '<span class="time">'+fmtTime(e.ts)+'</span></li>';
       }).join('');
@@ -589,18 +727,21 @@
   /* ---------- switch viste ---------- */
   var kioskView=document.getElementById('kiosk'), dashView=document.getElementById('dashboard');
   var swK=document.getElementById('swKiosk'), swD=document.getElementById('swDash');
-  var unwatch=null;
+
+  Data.watch(todayKey(), function(arr){
+    todayEntries=arr;
+    if(dashView.classList.contains('is-active')) renderDash(arr);
+    refreshRoomStatus();
+  });
+
   function show(view){
     if(view==='dash'){
       kioskView.classList.remove('is-active'); dashView.classList.add('is-active');
       swD.classList.add('on'); swK.classList.remove('on');
-      renderDash([]);
-      if(unwatch) unwatch();
-      unwatch=Data.watch(todayKey(), function(arr){ renderDash(arr); });
+      renderDash(todayEntries);
     } else {
       dashView.classList.remove('is-active'); kioskView.classList.add('is-active');
       swK.classList.add('on'); swD.classList.remove('on');
-      if(unwatch){ unwatch(); unwatch=null; }
     }
   }
   swK.addEventListener('click',function(){ show('kiosk'); location.hash=''; });
