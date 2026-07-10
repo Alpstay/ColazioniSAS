@@ -493,12 +493,12 @@
      ===================================================================== */
   const LETTI = {};
   function setLetti(a,b,n){ for(var i=a;i<=b;i++) LETTI[String(i)]=n; }
-  setLetti(101,114,2);   // piano 1 — doppie
-  setLetti(201,214,2);   // piano 2 — doppie
-  setLetti(301,314,2);   // piano 3 — doppie
-  setLetti(401,410,2);   // piano 4 — doppie
-  // eccezioni (stanza: numero letti) — singole, triple, quadruple:
-  Object.assign(LETTI, { '112':4, '291':4, '208':3, '305':3, '308':4 });
+  setLetti(101,114,3);   // piano 1 — matrimoniali (fino a 3: letto aggiunto)
+  setLetti(201,214,3);   // piano 2 — matrimoniali (fino a 3: letto aggiunto)
+  setLetti(301,314,3);   // piano 3 — matrimoniali (fino a 3: letto aggiunto)
+  setLetti(401,410,3);   // piano 4 — matrimoniali (fino a 3: letto aggiunto)
+  // eccezioni (stanza: numero letti) — quadruple e stanze fuori serie:
+  Object.assign(LETTI, { '112':4, '291':4, '308':4 });
 
   function stanzaValida(n){ return Object.prototype.hasOwnProperty.call(LETTI,String(n)); }
   function lettiStanza(n){ return LETTI[String(n)]||0; }
