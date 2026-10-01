@@ -1,0 +1,150 @@
+{
+ "date": "2026-10-01",
+ "property": "Alpstay – Smart Hotel Saslong",
+ "source": "La Scatola",
+ "rooms": {
+  "213": {
+   "max": 2,
+   "lang": "en"
+  },
+  "209": {
+   "max": 2,
+   "lang": "en"
+  },
+  "204": {
+   "max": 2,
+   "lang": "en"
+  },
+  "206": {
+   "max": 3,
+   "lang": "en"
+  },
+  "208": {
+   "max": 2,
+   "lang": "en"
+  },
+  "303": {
+   "max": 2,
+   "lang": "en"
+  },
+  "306": {
+   "max": 2,
+   "lang": "he"
+  },
+  "408": {
+   "max": 2,
+   "lang": "en"
+  },
+  "103": {
+   "max": 1,
+   "lang": "en"
+  },
+  "105": {
+   "max": 1,
+   "lang": "en"
+  },
+  "107": {
+   "max": 1,
+   "lang": "en"
+  },
+  "109": {
+   "max": 2,
+   "lang": "es"
+  },
+  "111": {
+   "max": 2,
+   "lang": "es"
+  },
+  "113": {
+   "max": 2,
+   "lang": "en"
+  },
+  "114": {
+   "max": 2,
+   "lang": "en"
+  },
+  "203": {
+   "max": 2,
+   "lang": "en"
+  },
+  "207": {
+   "max": 2,
+   "lang": "pt"
+  },
+  "210": {
+   "max": 2,
+   "lang": "es"
+  },
+  "301": {
+   "max": 2,
+   "lang": "en"
+  },
+  "302": {
+   "max": 2,
+   "lang": "de"
+  },
+  "304": {
+   "max": 1,
+   "lang": "de"
+  },
+  "308": {
+   "max": 1,
+   "lang": "en"
+  },
+  "406": {
+   "max": 1,
+   "lang": "en"
+  },
+  "102": {
+   "max": 3,
+   "lang": "en"
+  },
+  "104": {
+   "max": 3,
+   "lang": "en"
+  },
+  "106": {
+   "max": 3,
+   "lang": "en"
+  },
+  "112": {
+   "max": 4,
+   "lang": "en"
+  },
+  "201": {
+   "max": 2,
+   "lang": "pt"
+  },
+  "211": {
+   "max": 2,
+   "lang": "en"
+  },
+  "212": {
+   "max": 2,
+   "lang": "en"
+  },
+  "214": {
+   "max": 2,
+   "lang": "en"
+  },
+  "291": {
+   "max": 3,
+   "lang": "en"
+  },
+  "305": {
+   "max": 2,
+   "lang": "en"
+  },
+  "403": {
+   "max": 1,
+   "lang": "en"
+  }
+ },
+ "names_enc": {
+  "alg": "AES-GCM/PBKDF2-SHA256",
+  "iter": 250000,
+  "salt": "WkFSazgyc2e0mqm+7V5DeQ==",
+  "iv": "qPSOVBw7aw/rfYo/",
+  "ct": "utGrTK6S7FxxjOGg3GGaGzKyd6NjySsTLSfW7NcjHP9AFzz9rEz3yjsHu/LmP74tCcL4X5S0uU/PIYZOgeN3s1RNhY97qLZb2JZfUOuvKDJi2LuR5mXmNEgOugYgixLbbOQCBPAqChPkEHTPdoXMj8dKSoZ1IKKRXe1mD9DPL4LPkftvTA9tYAoXHmM7jrTlRRByXL+M9USJgnyGbT0wxKpn1ZYsSwrnaJW8jNkRHKviJumJ6l+wYY1iSd0Zgmmam5VesZYtYyeZ1HUS7jg2oG86ojZxXBVoYS4Wx6VimLQeFnZ1OmFES2utsreRohcvR0c20mQNDSgeJ7hWCLFu4me6iT//4uuVZzqvNWVrhT8FxmQByamT6mgd1lHH2FAqkUG8y7INVAPx+qO2ezsMM2B4dzmsvpLEztvn+amZKuLBTLOz22spMCaKSTqhBiiZei76ZI9SzCR5th8oDkKOn189O6K041uM/XXSrekeKK8KNIq7T2dYYJCl/KsS1tNrNnr0PngN57MdQhJe3ERHys/BGYjbgXVp6KULcXNgpDEOmo57FiDR0f6hXLXxosiiTfDCICparLXZsVtmLFJkWnaMUhpwNp2FFsdaQCtBfgFvLL/ZsMNmqWPVbBYt8Yze1VgXTcPexDiIXuRiNumwnqgq944xEVCAiFNQ6vY5UpdYLGGOEXe8UXAnLXwoZfmYMjsfTJ7HItTzA65Sp8z14PlS/XUlyMDbalZ9VB4TpqGdaP2111ZTs5Xzgy8nCuBfkJvKxhcwh3aTxQQbE+RdCczMqElGhvjWuN3lCVgMs5/OkRaJVT4xcUIPGSWZzTGFa+7Naoe6d2biAvYSGK3yGuo4FwDIYk0kvSi6qwfUvR6UFbn3/M6Ocm274exeuGSM4tfdQeopX8oxJN2XKuEc/HrxnRTW2/35I7iHf7Epd/x7CPs1UoRa8rDeD+DS3aSmXXnuxGdSYfZ5cz5PLsdUo1SCa0Y7lMQ1Qz6ZNPbWtdL7TQ4kLBKKJ8/kjAnxq2xx0LBLkygzXZuJYOVmqoIi8mxZfn/0yWUQ37yJA2OEZ+D6hbAleDNaKMp/I/uFbw=="
+ }
+}

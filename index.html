@@ -243,6 +243,38 @@
   .stat span{font-size:clamp(11px,1.4vw,13px);letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft);}
 
   .log-title{font-size:clamp(13px,1.6vw,15px);letter-spacing:.24em;text-transform:uppercase;color:var(--ink-soft);border-bottom:1px solid var(--line);padding-bottom:8px;margin-bottom:4px;}
+
+  .room-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(76px,1fr));gap:8px;padding:10px 0 4px;}
+  .room-tile{border:1px solid var(--line);border-radius:6px;padding:8px 4px;text-align:center;background:var(--white);}
+  .room-tile .rt-nr{font-family:'Lato',sans-serif;font-weight:700;font-size:15px;color:var(--ink);}
+  .room-tile .rt-cnt{font-size:12px;color:var(--ink-soft);margin-top:2px;}
+  /* elenco stanze attese (Sala) */
+  .exp-list{list-style:none;margin:0;padding:6px 0 4px;display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));column-gap:22px;}
+  .exp-row{display:flex;align-items:center;gap:12px;padding:11px 6px;border-bottom:1px solid var(--line);font-size:clamp(15px,1.9vw,18px);border-radius:4px;}
+  .exp-check{flex:0 0 28px;height:28px;border-radius:50%;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;}
+  .exp-check svg{width:16px;height:16px;display:none;}
+  .exp-nr{font-family:'Lato',sans-serif;font-weight:700;min-width:44px;color:var(--ink);}
+  .exp-name{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink-soft);font-size:.86em;}
+  .exp-cnt{font-family:'Lato',sans-serif;font-weight:700;color:rgba(22,20,15,.35);white-space:nowrap;}
+  .exp-cnt small{font-weight:400;font-size:.72em;margin-left:3px;}
+  .exp-row.in .exp-check{background:#2E9E5B;border-color:#2E9E5B;}
+  .exp-row.in .exp-check svg{display:block;}
+  .exp-row.in .exp-cnt{color:#2E9E5B;}
+  .exp-row.full{background:rgba(46,158,91,.08);}
+  .exp-row.extra .exp-nr::after{content:' fuori elenco';font-family:'Belleza',sans-serif;font-weight:400;font-size:.6em;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);}
+  .exp-legend{font-size:13px;color:var(--ink-soft);letter-spacing:.04em;margin:6px 0 0;}
+  .room-tile .rt-name{font-size:12px;color:var(--ink);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 4px;}
+  .room-grid.with-names{grid-template-columns:repeat(auto-fill,minmax(132px,1fr));}
+  .log .who{color:var(--ink-soft);font-size:.82em;margin-left:6px;}
+  .log-title-row{display:flex;align-items:center;justify-content:space-between;gap:12px;}
+  .names-btn{font:inherit;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);background:none;border:1px solid var(--line-gold);border-radius:20px;padding:5px 12px;cursor:pointer;}
+  .pw-input{width:100%;box-sizing:border-box;font-family:'Lato',sans-serif;font-size:18px;padding:12px 14px;border:1px solid var(--line);border-radius:6px;margin:0 0 8px;text-align:center;letter-spacing:.06em;}
+  .pw-err{min-height:20px;color:#B3261E;font-size:14px;margin-bottom:12px;}
+  .room-tile.rt-none{opacity:.55;}
+  .room-tile.rt-partial{border-color:var(--gold);}
+  .room-tile.rt-partial .rt-cnt{color:var(--gold);}
+  .room-tile.rt-full{border-color:var(--gold);background:var(--sand);}
+  .room-tile.rt-full .rt-cnt{color:var(--gold);font-weight:700;}
   .log{list-style:none;margin:0;padding:0;overflow:auto;flex:1;min-height:80px;}
   .log li{display:flex;align-items:center;justify-content:space-between;padding:13px 4px;border-bottom:1px solid var(--line);font-size:clamp(15px,2vw,18px);}
   .log .room{letter-spacing:.06em;}
@@ -370,14 +402,18 @@
       </div>
 
       <div class="stat-row">
-        <div class="stat"><b id="statRooms">0</b><span>stanze</span></div>
-        <div class="stat"><b id="statEntries">0</b><span>ingressi</span></div>
+        <div class="stat"><b id="statRooms">0</b><span>stanze presenti</span></div>
+        <div class="stat"><b id="statExpected">0</b><span>stanze attese</span></div>
       </div>
 
-      <div class="log-title">Ingressi recenti</div>
-      <ul class="log" id="log"><li class="log-empty">Ancora nessun ingresso oggi</li></ul>
+      <div class="log-title log-title-row">
+        <span>Stanze attese</span>
+        <button class="names-btn" id="namesBtn" hidden>Mostra nomi</button>
+      </div>
+      <ul class="exp-list" id="roomGrid"></ul>
 
-      <button class="reset" id="resetBtn">Azzera giornata</button>
+      <div class="log-title" style="margin-top:20px;">Ingressi recenti</div>
+      <ul class="log" id="log"><li class="log-empty">Ancora nessun ingresso oggi</li></ul>
     </div>
   </section>
 
@@ -391,17 +427,6 @@
   <div class="wish">Buon appetito</div>
 </div>
 
-<!-- conferma azzeramento -->
-<div class="ask" id="ask">
-  <div class="ask-box">
-    <p>Azzerare il conteggio di oggi?<br><span class="small">Il totale ripartirà da zero.</span></p>
-    <div class="ask-actions">
-      <button class="btn-ghost" id="askNo">Annulla</button>
-      <button class="btn-solid" id="askYes">Azzera</button>
-    </div>
-  </div>
-</div>
-
 <!-- conferma stanza non in elenco -->
 <div class="ask" id="askRoom">
   <div class="ask-box">
@@ -409,6 +434,19 @@
     <div class="ask-actions">
       <button class="btn-ghost" id="askRoomFix">Correggi</button>
       <button class="btn-solid" id="askRoomOk">Conferma</button>
+    </div>
+  </div>
+</div>
+
+<!-- password nomi (solo tablet Sala) -->
+<div class="ask" id="askPw">
+  <div class="ask-box">
+    <p>Password Sala<br><span class="small">Serve una volta sola su questo dispositivo per vedere i nomi dei prenotanti.</span></p>
+    <input class="pw-input" id="pwInput" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Saslong-XXXX-XXXX">
+    <div class="pw-err" id="pwErr"></div>
+    <div class="ask-actions">
+      <button class="btn-ghost" id="pwCancel">Annulla</button>
+      <button class="btn-solid" id="pwOk">Sblocca</button>
     </div>
   </div>
 </div>
@@ -484,24 +522,66 @@
   }
 
   /* =====================================================================
-     STANZE E LETTI
-     Per ogni stanza indica il numero massimo di letti (persone).
-     Gli ospiti possono presentarsi anche uno alla volta: l'app somma
-     gli arrivi della stessa stanza nella giornata e non supera questo
-     massimo. Chi digita una stanza non in elenco può confermare comunque.
-     Modifica gli intervalli e le eccezioni qui sotto.
+     ROSTER DEL GIORNO — da La Scatola (Slope)
+     Ogni mattina un'attività pianificata genera roster.json accanto a
+     questo file, con le stanze effettivamente in casa quella notte:
+       { "date":"2026-10-01", "rooms": { "213": {"max":2,"lang":"en"}, ... } }
+     "max" = quante persone di quella stanza sono attese a colazione
+     (adulti+bambini del soggiorno). "lang" = lingua per il saluto.
+     Se il file manca o non è per oggi, si usa FALLBACK_LETTI qui sotto
+     e il saluto resta quello rotante: l'app non si blocca mai.
      ===================================================================== */
-  const LETTI = {};
-  function setLetti(a,b,n){ for(var i=a;i<=b;i++) LETTI[String(i)]=n; }
-  setLetti(101,114,3);   // piano 1 — matrimoniali (fino a 3: letto aggiunto)
-  setLetti(201,214,3);   // piano 2 — matrimoniali (fino a 3: letto aggiunto)
-  setLetti(301,314,3);   // piano 3 — matrimoniali (fino a 3: letto aggiunto)
-  setLetti(401,410,3);   // piano 4 — matrimoniali (fino a 3: letto aggiunto)
-  // eccezioni (stanza: numero letti) — quadruple e stanze fuori serie:
-  Object.assign(LETTI, { '112':4, '291':4, '308':4 });
+  const FALLBACK_LETTI = {};
+  function setLetti(a,b,n){ for(var i=a;i<=b;i++) FALLBACK_LETTI[String(i)]=n; }
+  setLetti(101,114,3); setLetti(201,214,3); setLetti(301,314,3); setLetti(401,410,3);
+  Object.assign(FALLBACK_LETTI, { '112':4, '291':4, '308':4 });
 
-  function stanzaValida(n){ return Object.prototype.hasOwnProperty.call(LETTI,String(n)); }
-  function lettiStanza(n){ return LETTI[String(n)]||0; }
+  var ROSTER = {};       // stanza -> {max, lang}
+  var ROSTER_DATE = null;
+  var ROSTER_SOURCE = 'fallback';
+  var ROSTER_NOMI_ENC = null; // nomi prenotanti cifrati (solo tablet Sala)
+  var NOMI = {};              // stanza -> "Cognome Nome", in chiaro solo in memoria
+  /* Roster incorporato: rende il file autosufficiente (funziona anche
+     scaricato e aperto dal computer). Se accanto all'HTML c'è un
+     roster.json di oggi più recente, vince quello. Non modificare a mano
+     il blocco tra i marcatori: viene riscritto dall'aggiornamento automatico. */
+  /*ROSTER_EMBED_START*/const ROSTER_EMBEDDED = {"date":"2026-10-01","property":"Alpstay – Smart Hotel Saslong","source":"La Scatola","rooms":{"213":{"max":2,"lang":"en"},"209":{"max":2,"lang":"en"},"204":{"max":2,"lang":"en"},"206":{"max":3,"lang":"en"},"208":{"max":2,"lang":"en"},"303":{"max":2,"lang":"en"},"306":{"max":2,"lang":"he"},"408":{"max":2,"lang":"en"},"103":{"max":1,"lang":"en"},"105":{"max":1,"lang":"en"},"107":{"max":1,"lang":"en"},"109":{"max":2,"lang":"es"},"111":{"max":2,"lang":"es"},"113":{"max":2,"lang":"en"},"114":{"max":2,"lang":"en"},"203":{"max":2,"lang":"en"},"207":{"max":2,"lang":"pt"},"210":{"max":2,"lang":"es"},"301":{"max":2,"lang":"en"},"302":{"max":2,"lang":"de"},"304":{"max":1,"lang":"de"},"308":{"max":1,"lang":"en"},"406":{"max":1,"lang":"en"},"102":{"max":3,"lang":"en"},"104":{"max":3,"lang":"en"},"106":{"max":3,"lang":"en"},"112":{"max":4,"lang":"en"},"201":{"max":2,"lang":"pt"},"211":{"max":2,"lang":"en"},"212":{"max":2,"lang":"en"},"214":{"max":2,"lang":"en"},"291":{"max":3,"lang":"en"},"305":{"max":2,"lang":"en"},"403":{"max":1,"lang":"en"}},"names_enc":{"alg":"AES-GCM/PBKDF2-SHA256","iter":250000,"salt":"WkFSazgyc2e0mqm+7V5DeQ==","iv":"qPSOVBw7aw/rfYo/","ct":"utGrTK6S7FxxjOGg3GGaGzKyd6NjySsTLSfW7NcjHP9AFzz9rEz3yjsHu/LmP74tCcL4X5S0uU/PIYZOgeN3s1RNhY97qLZb2JZfUOuvKDJi2LuR5mXmNEgOugYgixLbbOQCBPAqChPkEHTPdoXMj8dKSoZ1IKKRXe1mD9DPL4LPkftvTA9tYAoXHmM7jrTlRRByXL+M9USJgnyGbT0wxKpn1ZYsSwrnaJW8jNkRHKviJumJ6l+wYY1iSd0Zgmmam5VesZYtYyeZ1HUS7jg2oG86ojZxXBVoYS4Wx6VimLQeFnZ1OmFES2utsreRohcvR0c20mQNDSgeJ7hWCLFu4me6iT//4uuVZzqvNWVrhT8FxmQByamT6mgd1lHH2FAqkUG8y7INVAPx+qO2ezsMM2B4dzmsvpLEztvn+amZKuLBTLOz22spMCaKSTqhBiiZei76ZI9SzCR5th8oDkKOn189O6K041uM/XXSrekeKK8KNIq7T2dYYJCl/KsS1tNrNnr0PngN57MdQhJe3ERHys/BGYjbgXVp6KULcXNgpDEOmo57FiDR0f6hXLXxosiiTfDCICparLXZsVtmLFJkWnaMUhpwNp2FFsdaQCtBfgFvLL/ZsMNmqWPVbBYt8Yze1VgXTcPexDiIXuRiNumwnqgq944xEVCAiFNQ6vY5UpdYLGGOEXe8UXAnLXwoZfmYMjsfTJ7HItTzA65Sp8z14PlS/XUlyMDbalZ9VB4TpqGdaP2111ZTs5Xzgy8nCuBfkJvKxhcwh3aTxQQbE+RdCczMqElGhvjWuN3lCVgMs5/OkRaJVT4xcUIPGSWZzTGFa+7Naoe6d2biAvYSGK3yGuo4FwDIYk0kvSi6qwfUvR6UFbn3/M6Ocm274exeuGSM4tfdQeopX8oxJN2XKuEc/HrxnRTW2/35I7iHf7Epd/x7CPs1UoRa8rDeD+DS3aSmXXnuxGdSYfZ5cz5PLsdUo1SCa0Y7lMQ1Qz6ZNPbWtdL7TQ4kLBKKJ8/kjAnxq2xx0LBLkygzXZuJYOVmqoIi8mxZfn/0yWUQ37yJA2OEZ+D6hbAleDNaKMp/I/uFbw=="}};/*ROSTER_EMBED_END*/
+
+  async function caricaRoster(){
+    var oggi = todayKey(), scelto = null;
+    try{
+      var res = await fetch('roster.json', {cache:'no-store'});
+      if(res.ok){ var j = await res.json(); if(j && j.date===oggi) scelto = j; }
+    }catch(e){ /* file:// o file assente: si usa il roster incorporato */ }
+    if(!scelto && ROSTER_EMBEDDED && ROSTER_EMBEDDED.date===oggi) scelto = ROSTER_EMBEDDED;
+    if(scelto){
+      var encPrima = ROSTER_NOMI_ENC && ROSTER_NOMI_ENC.ct;
+      ROSTER = scelto.rooms || {};
+      ROSTER_DATE = scelto.date;
+      ROSTER_SOURCE = 'scatola';
+      ROSTER_NOMI_ENC = scelto.names_enc || null;
+      if(ROSTER_NOMI_ENC && ROSTER_NOMI_ENC.ct!==encPrima) NOMI = {};
+    } else {
+      ROSTER = {}; ROSTER_DATE = null; ROSTER_SOURCE = 'fallback'; ROSTER_NOMI_ENC = null; NOMI = {};
+      console.info('Nessun elenco ospiti di oggi: uso la mappa stanze di riserva.');
+    }
+  }
+
+  function stanzaValida(n){
+    if(Object.prototype.hasOwnProperty.call(ROSTER,String(n))) return true;
+    if(ROSTER_SOURCE==='fallback') return Object.prototype.hasOwnProperty.call(FALLBACK_LETTI,String(n));
+    return false;
+  }
+  function lettiStanza(n){
+    var r=ROSTER[String(n)];
+    if(r) return r.max||0;
+    if(ROSTER_SOURCE==='fallback') return FALLBACK_LETTI[String(n)]||0;
+    return 0;
+  }
+  function linguaStanza(n){
+    var r=ROSTER[String(n)];
+    return (r && r.lang) || null;
+  }
 
   /* ---------- saluto multilingue ---------- */
   var greetings=[
@@ -520,15 +600,42 @@
     {t:'صباح الخير',l:'العربية'},
     {t:'בוקר טוב',l:'עברית'}
   ];
+  // codice lingua (come arriva dal roster / PMS) -> voce del saluto
+  var GREET_BY_CODE = {
+    it:{t:'Buongiorno',l:'italiano'}, de:{t:'Guten Morgen',l:'deutsch'},
+    en:{t:'Good morning',l:'english'}, fr:{t:'Bonjour',l:'français'},
+    es:{t:'Buenos días',l:'español'}, nl:{t:'Goedemorgen',l:'nederlands'},
+    pt:{t:'Bom dia',l:'português'}, pl:{t:'Dzień dobry',l:'polski'},
+    cs:{t:'Dobré ráno',l:'čeština'}, ru:{t:'Доброе утро',l:'русский'},
+    zh:{t:'早上好',l:'中文'}, ko:{t:'좋은 아침',l:'한국어'},
+    ar:{t:'صباح الخير',l:'العربية'}, he:{t:'בוקר טוב',l:'עברית'}
+  };
   var gi=0, gEl=document.getElementById('greet'), glEl=document.getElementById('greetLang');
-  setInterval(function(){
+  var greetLocked=false, greetTimer=null;
+  function showGreet(entry){
     gEl.classList.add('fade-out'); glEl.classList.add('fade-out');
     setTimeout(function(){
-      gi=(gi+1)%greetings.length;
-      gEl.textContent=greetings[gi].t; glEl.textContent=greetings[gi].l;
+      gEl.textContent=entry.t; glEl.textContent=entry.l;
       gEl.classList.remove('fade-out'); glEl.classList.remove('fade-out');
     },600);
-  },3200);
+  }
+  function startGreetRotation(){
+    clearInterval(greetTimer);
+    greetTimer=setInterval(function(){
+      if(greetLocked) return;
+      gi=(gi+1)%greetings.length;
+      showGreet(greetings[gi]);
+    },3200);
+  }
+  // fissa il saluto nella lingua dell'ospite mentre digita la sua stanza
+  function lockGreetToLang(code){
+    var entry = code && GREET_BY_CODE[code];
+    if(!entry) return unlockGreet();
+    greetLocked=true;
+    showGreet(entry);
+  }
+  function unlockGreet(){ greetLocked=false; }
+  startGreetRotation();
 
   /* ---------- figure persone (svg) ---------- */
   function personSVG(){
@@ -563,6 +670,13 @@
   /* ---------- selezione persone + invio ---------- */
   var confirmEl=document.getElementById('confirm'), confirmDetail=document.getElementById('confirmDetail');
   var confirmTimer=null, selectedPeople=null, sendBtn=document.getElementById('sendBtn');
+  var wishEl=document.querySelector('.confirm .wish');
+  var WISH_BY_LANG = {
+    it:'Buon appetito', de:'Guten Appetit', en:'Enjoy your breakfast', fr:'Bon appétit',
+    es:'Buen provecho', nl:'Smakelijk eten', pt:'Bom apetite', pl:'Smacznego',
+    cs:'Dobrou chuť', ru:'Приятного аппетита', zh:'请慢用', ko:'맛있게 드세요',
+    ar:'بالهناء والشفاء', he:'בתאבון'
+  };
   var roomStatusEl=document.getElementById('roomStatus');
   var todayEntries=[];
 
@@ -582,7 +696,8 @@
   }
   function isPrefixOfValid(s){
     if(s==='') return true;
-    for(var k in LETTI){ if(Object.prototype.hasOwnProperty.call(LETTI,k) && k.indexOf(s)===0) return true; }
+    var mappa = (ROSTER_SOURCE==='fallback') ? FALLBACK_LETTI : ROSTER;
+    for(var k in mappa){ if(Object.prototype.hasOwnProperty.call(mappa,k) && k.indexOf(s)===0) return true; }
     return false;
   }
   var roomBad=false;
@@ -591,7 +706,9 @@
     dispEl.classList.remove('bad');
 
     if(room==='' || (!stanzaValida(room) && isPrefixOfValid(room))){
-      roomStatusEl.textContent=''; roomBad=false; applyPeopleLimit(Infinity); updateSend(); return;
+      roomStatusEl.textContent=''; roomBad=false; applyPeopleLimit(Infinity); updateSend();
+      unlockGreet();
+      return;
     }
 
     if(!stanzaValida(room)){
@@ -603,10 +720,13 @@
         setTimeout(function(){ roomStatusEl.classList.remove('shake'); },450);
       }
       roomBad=true;
-      applyPeopleLimit(Infinity); updateSend(); return;
+      applyPeopleLimit(Infinity); updateSend();
+      unlockGreet();
+      return;
     }
 
     roomBad=false;
+    lockGreetToLang(linguaStanza(room));
     var info=roomInfo(room);
     if(info.restano<=0){
       roomStatusEl.innerHTML='Stanza <b>al completo</b> · '+info.usati+'/'+info.max;
@@ -648,6 +768,8 @@
       msg+=' · '+Math.min(prima+people,max)+'/'+max;
     }
     confirmDetail.textContent=msg;
+    var wishEntry = GREET_BY_CODE[linguaStanza(roomVal)];
+    wishEl.textContent = wishEntry ? (WISH_BY_LANG[linguaStanza(roomVal)]||'Buon appetito') : 'Buon appetito';
     confirmEl.classList.add('show');
     room=''; clearSelection(); renderDisplay(); refreshRoomStatus();
     clearTimeout(confirmTimer);
@@ -689,9 +811,47 @@
   /* ---------- dashboard ---------- */
   var totalNum=document.getElementById('totalNum'),
       statRooms=document.getElementById('statRooms'),
-      statEntries=document.getElementById('statEntries'),
+      statExpected=document.getElementById('statExpected'),
       logEl=document.getElementById('log'),
+      roomGridEl=document.getElementById('roomGrid'),
       dashDate=document.getElementById('dashDate');
+
+  function esc(s){ return String(s).replace(/[&<>"']/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+
+  /* ---------- nomi prenotanti (cifrati, solo tablet Sala) ----------
+     roster.json pubblico contiene i nomi solo cifrati (AES-GCM, chiave da
+     password con PBKDF2). La password si inserisce una volta su questo
+     dispositivo; i nomi in chiaro restano solo in memoria. Il chiosco
+     non li decifra mai. */
+  var PW_KEY='alpstay_sala_pw';
+  var namesBtn=document.getElementById('namesBtn');
+  var askPw=document.getElementById('askPw'), pwInput=document.getElementById('pwInput'), pwErr=document.getElementById('pwErr');
+  function b64bytes(s){ var b=atob(s), u=new Uint8Array(b.length); for(var i=0;i<b.length;i++) u[i]=b.charCodeAt(i); return u; }
+  async function decifraNomi(pw){
+    var e=ROSTER_NOMI_ENC, enc=new TextEncoder();
+    var base=await crypto.subtle.importKey('raw',enc.encode(pw),'PBKDF2',false,['deriveKey']);
+    var key=await crypto.subtle.deriveKey({name:'PBKDF2',salt:b64bytes(e.salt),iterations:e.iter,hash:'SHA-256'},base,{name:'AES-GCM',length:256},false,['decrypt']);
+    var pt=await crypto.subtle.decrypt({name:'AES-GCM',iv:b64bytes(e.iv),additionalData:enc.encode(ROSTER_DATE)},key,b64bytes(e.ct));
+    return JSON.parse(new TextDecoder().decode(pt));
+  }
+  function pwSalvata(){ try{ return localStorage.getItem(PW_KEY); }catch(_){ return null; } }
+  async function sbloccaNomi(pw){
+    if(!ROSTER_NOMI_ENC || !pw || !(window.crypto&&crypto.subtle)) return false;
+    try{
+      NOMI=await decifraNomi(pw);
+      try{ localStorage.setItem(PW_KEY,pw); }catch(_){}
+      return true;
+    }catch(_){ NOMI={}; return false; }
+  }
+  namesBtn.addEventListener('click',function(){ pwErr.textContent=''; pwInput.value=''; askPw.classList.add('show'); setTimeout(function(){pwInput.focus();},50); });
+  document.getElementById('pwCancel').addEventListener('click',function(){ askPw.classList.remove('show'); });
+  async function provaPw(){
+    var ok=await sbloccaNomi(pwInput.value.trim());
+    if(ok){ askPw.classList.remove('show'); renderDash(todayEntries); }
+    else pwErr.textContent='Password non corretta';
+  }
+  document.getElementById('pwOk').addEventListener('click',provaPw);
+  pwInput.addEventListener('keydown',function(ev){ if(ev.key==='Enter') provaPw(); });
 
   function fmtTime(ts){ var d=new Date(ts); return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'); }
 
@@ -700,15 +860,42 @@
     var d=new Date();
     dashDate.textContent=d.toLocaleDateString('it-IT',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
     var total=arr.reduce(function(s,e){return s+e.people;},0);
-    var rooms={}; arr.forEach(function(e){rooms[e.room]=true;});
+    var presenti={};
+    arr.forEach(function(e){ presenti[e.room]=(presenti[e.room]||0)+(e.people||0); });
     totalNum.textContent=total;
-    statRooms.textContent=Object.keys(rooms).length;
-    statEntries.textContent=arr.length;
+    statRooms.textContent=Object.keys(presenti).length;
+
+    // Stanza per stanza: parte dal roster di oggi (La Scatola); le stanze
+    // arrivate ma fuori roster (es. "fuori elenco") sono aggiunte in coda.
+    var stanzeRoster=Object.keys(ROSTER);
+    var stanzeExtra=Object.keys(presenti).filter(function(r){ return stanzeRoster.indexOf(r)<0; });
+    statExpected.textContent = stanzeRoster.length || '—';
+
+    var byNum=function(a,b){ return Number(a)-Number(b); };
+    var ordine=stanzeRoster.slice().sort(byNum).concat(stanzeExtra.sort(byNum));
+    var CHECK='<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+    if(ordine.length===0){
+      roomGridEl.innerHTML='<li class="log-empty">Elenco di oggi non ancora caricato (manca roster.json di oggi)</li>';
+    } else {
+      roomGridEl.innerHTML = ordine.map(function(r){
+        var inRoster = stanzeRoster.indexOf(r)>=0;
+        var max = inRoster ? ((ROSTER[r]&&ROSTER[r].max) || 0) : 0;
+        var cnt = presenti[r]||0;
+        var cls = 'exp-row' + (cnt>0?' in':'') + (max>0&&cnt>=max?' full':'') + (inRoster?'':' extra');
+        var cntTxt = cnt>0 ? (max>0 ? cnt+'<small>/ '+max+'</small>' : String(cnt)) : (max>0 ? '0<small>/ '+max+'</small>' : '');
+        var nome = NOMI[r] ? esc(NOMI[r]) : '';
+        return '<li class="'+cls+'"><span class="exp-check">'+CHECK+'</span><span class="exp-nr">'+r+'</span>'+
+               '<span class="exp-name">'+nome+'</span><span class="exp-cnt">'+cntTxt+'</span></li>';
+      }).join('');
+    }
+    namesBtn.hidden = !ROSTER_NOMI_ENC || Object.keys(NOMI).length>0;
+
     if(arr.length===0){
       logEl.innerHTML='<li class="log-empty">Ancora nessun ingresso oggi</li>';
     } else {
       var rows=arr.slice().reverse().map(function(e){
-        return '<li><span class="room">Stanza '+e.room+(e.override?' <span class="flag">fuori elenco</span>':'')+'</span>'+
+        var who = NOMI[e.room] ? '<span class="who">'+esc(NOMI[e.room].split(' · ')[0])+'</span>' : '';
+        return '<li><span class="room">Stanza '+e.room+who+(e.override?' <span class="flag">fuori elenco</span>':'')+'</span>'+
                '<span class="ppl">'+e.people+(e.people===1?' persona':' persone')+'</span>'+
                '<span class="time">'+fmtTime(e.ts)+'</span></li>';
       }).join('');
@@ -716,13 +903,6 @@
     }
   }
 
-  /* ---------- azzeramento ---------- */
-  var ask=document.getElementById('ask');
-  document.getElementById('resetBtn').addEventListener('click',function(){ ask.classList.add('show'); });
-  document.getElementById('askNo').addEventListener('click',function(){ ask.classList.remove('show'); });
-  document.getElementById('askYes').addEventListener('click',async function(){
-    await Data.clear(todayKey()); ask.classList.remove('show');
-  });
 
   /* ---------- switch viste ---------- */
   var kioskView=document.getElementById('kiosk'), dashView=document.getElementById('dashboard');
@@ -767,6 +947,17 @@
   document.addEventListener('webkitfullscreenchange',syncFs);
 
   renderDisplay();
+  var GIORNO_AVVIO = todayKey();
+  async function aggiorna(){
+    if(todayKey()!==GIORNO_AVVIO){ location.reload(); return; } // nuovo giorno: riparte pulita
+    await caricaRoster();
+    if(pwSalvata() && ROSTER_NOMI_ENC && !Object.keys(NOMI).length) await sbloccaNomi(pwSalvata());
+    refreshRoomStatus();
+    if(dashView.classList.contains('is-active')) renderDash(todayEntries);
+  }
+  await aggiorna();
+  // ricontrolla l'elenco ospiti ogni 5 minuti (partenze anticipate, nuovi arrivi)
+  setInterval(aggiorna, 5*60*1000);
 </script>
 </body>
 </html>
