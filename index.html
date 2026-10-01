@@ -414,6 +414,7 @@
 
       <div class="log-title" style="margin-top:20px;">Ingressi recenti</div>
       <ul class="log" id="log"><li class="log-empty">Ancora nessun ingresso oggi</li></ul>
+      <button class="reset" id="resetBtn">Azzera oggi</button>
     </div>
   </section>
 
@@ -434,6 +435,17 @@
     <div class="ask-actions">
       <button class="btn-ghost" id="askRoomFix">Correggi</button>
       <button class="btn-solid" id="askRoomOk">Conferma</button>
+    </div>
+  </div>
+</div>
+
+<!-- conferma azzeramento (solo vista Sala) -->
+<div class="ask" id="askReset">
+  <div class="ask-box">
+    <p>Azzerare le registrazioni di oggi?<br><span class="small" id="askResetInfo">Il totale e le spunte ripartono da zero su tutti i tablet.</span></p>
+    <div class="ask-actions">
+      <button class="btn-ghost" id="resetNo">Annulla</button>
+      <button class="btn-solid" id="resetYes">Azzera</button>
     </div>
   </div>
 </div>
@@ -903,6 +915,22 @@
     }
   }
 
+
+  /* ---------- azzera oggi (Sala, conferma in due passaggi) ---------- */
+  var askReset=document.getElementById('askReset');
+  document.getElementById('resetBtn').addEventListener('click',function(){
+    var n=(todayEntries||[]).reduce(function(s,e){return s+(e.people||0);},0);
+    document.getElementById('askResetInfo').textContent = n
+      ? 'Si cancellano '+n+(n===1?' persona registrata':' persone registrate')+' di oggi, su tutti i tablet.'
+      : 'Oggi non ci sono registrazioni.';
+    askReset.classList.add('show');
+  });
+  document.getElementById('resetNo').addEventListener('click',function(){ askReset.classList.remove('show'); });
+  document.getElementById('resetYes').addEventListener('click',async function(){
+    var btn=this; btn.disabled=true;
+    try{ await Data.clear(todayKey()); }catch(e){ console.warn('Azzeramento non riuscito',e); }
+    btn.disabled=false; askReset.classList.remove('show');
+  });
 
   /* ---------- switch viste ---------- */
   var kioskView=document.getElementById('kiosk'), dashView=document.getElementById('dashboard');
