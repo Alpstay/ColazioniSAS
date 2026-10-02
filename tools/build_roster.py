@@ -2,15 +2,16 @@
 
 Ingressi (file privati, MAI da pubblicare):
   stays.json  -> lista prenotazioni: [{"room","people","arrival","departure","reservation_id"}]
-  guests.json -> {"rows":[...]} righe di curated_guest_stays (La Scatola)
+  guests      -> uno o più file (separati da virgola) con le righe di curated_guest_stays:
+                 {"rows":[...]} oppure il risultato grezzo di La Scatola {"data":[...], ...}
 Uso:
-  python3 build_roster.py stays.json guests.json PASSWORD 2026-10-02 [2026-10-03 ...] > roster.json
+  python3 build_roster.py stays.json guests1.txt,guests2.txt PASSWORD 2026-10-02 [2026-10-03 ...] > roster.json
 
 Colazione del giorno D = chi ha dormito la notte D-1: arrival < D <= departure.
 "dep": true = stanza in partenza quel giorno; false = fermata.
 Gli ID di Slope non vengono mai modificati: servono solo per unire prenotazioni e ospiti.
 """
-import base64, collections, datetime, json, os, sys
+import base64, collections, datetime, json, os, re, sys
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.hazmat.primitives import hashes
@@ -28,6 +29,7 @@ for lang, codes in {
     for c in codes.split():
         COUNTRY[c] = lang
 ITER = 250_000
+UUID = re.compile(r"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}")
 b64 = lambda b: base64.b64encode(b).decode()
 
 
@@ -70,8 +72,23 @@ def cifra(nomi, password, giorno):
 
 def main():
     stays = json.load(open(sys.argv[1], encoding="utf-8"))
-    rows = json.load(open(sys.argv[2], encoding="utf-8"))["rows"]
+    # guests: uno o più file separati da virgola; ognuno è {"rows":[...]} oppure il risultato
+    # grezzo di La Scatola {"data":[...], "freshness":..., "page":...} salvato su disco.
+    rows = []
+    for f in sys.argv[2].split(","):
+        j = json.load(open(f, encoding="utf-8"))
+        rows += j.get("rows") or j.get("data") or []
     password, giorni = sys.argv[3], sys.argv[4:]
+    assert giorni, "indica almeno un giorno (AAAA-MM-GG)"
+    for s in stays:
+        assert UUID.fullmatch(s["reservation_id"]), ("reservation_id non valido", s)
+        assert s["arrival"] < s["departure"], ("date non valide", s)
+    ids = {s["reservation_id"] for s in stays}
+    assert len(ids) == len(stays), "reservation_id duplicati in stays.json"
+    orfani = {r["reservation_id"] for r in rows} - ids
+    if orfani:
+        print("ATTENZIONE: %d prenotazioni con ospiti ma assenti in stays.json (possibile errore di "
+              "trascrizione di un reservation_id): %s" % (len(orfani), sorted(orfani)), file=sys.stderr)
     per_res = collections.defaultdict(list)
     for r in rows:
         per_res[r["reservation_id"]].append(r)
@@ -88,7 +105,7 @@ def main():
             rooms[s["room"]] = {"max": int(s["people"]), "lang": lingua(g), "dep": s["departure"] == d}
             if nome(g):
                 nomi[s["room"]] = nome(g)
-        days[d] = {"rooms": dict(sorted(rooms.items(), key=lambda kv: int(kv[0]))), "names_enc": cifra(nomi, password, d)}
+        days[d] = {"rooms": dict(sorted(rooms.items(), key=lambda kv: (0, int(kv[0])) if kv[0].isdigit() else (1, kv[0]))), "names_enc": cifra(nomi, password, d)}
         report.append("%s: %d stanze, %d persone, %d partenze, %d fermate, %d nomi, lingue %s" % (
             d, len(rooms), sum(r["max"] for r in rooms.values()), sum(r["dep"] for r in rooms.values()),
             sum(not r["dep"] for r in rooms.values()), len(nomi),
