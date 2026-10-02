@@ -237,7 +237,7 @@
   }
   .total-num{font-size:clamp(80px,20vw,180px);line-height:.9;color:var(--ink);}
   .total-cap{font-size:clamp(15px,2vw,20px);letter-spacing:.4em;text-indent:.4em;text-transform:uppercase;color:var(--gold);margin-top:6px;}
-  .stat-row{display:flex;justify-content:center;gap:clamp(28px,6vw,64px);margin:clamp(18px,3vw,28px) 0;}
+  .stat-row{display:flex;justify-content:center;flex-wrap:wrap;gap:clamp(18px,4.5vw,56px);margin:clamp(18px,3vw,28px) 0;}
   .stat{text-align:center;}
   .stat b{display:block;font-size:clamp(26px,4vw,40px);color:var(--ink);}
   .stat span{font-size:clamp(11px,1.4vw,13px);letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft);}
@@ -250,7 +250,7 @@
   .room-tile .rt-cnt{font-size:12px;color:var(--ink-soft);margin-top:2px;}
   /* elenco stanze attese (Sala) */
   .exp-list{list-style:none;margin:0;padding:6px 0 4px;display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));column-gap:22px;}
-  .exp-row{display:flex;align-items:center;gap:12px;padding:11px 6px;border-bottom:1px solid var(--line);font-size:clamp(15px,1.9vw,18px);border-radius:4px;}
+  .exp-row{display:flex;align-items:center;gap:9px;padding:11px 6px;border-bottom:1px solid var(--line);font-size:clamp(15px,1.9vw,18px);border-radius:4px;}
   .exp-check{flex:0 0 28px;height:28px;border-radius:50%;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;}
   .exp-check svg{width:16px;height:16px;display:none;}
   .exp-nr{font-family:'Lato',sans-serif;font-weight:700;min-width:44px;color:var(--ink);}
@@ -262,6 +262,9 @@
   .exp-row.in .exp-cnt{color:#2E9E5B;}
   .exp-row.full{background:rgba(46,158,91,.08);}
   .exp-row.extra .exp-nr::after{content:' fuori elenco';font-family:'Belleza',sans-serif;font-weight:400;font-size:.6em;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);}
+  .exp-tag{flex:0 0 auto;font-size:10px;letter-spacing:.12em;text-transform:uppercase;border-radius:20px;padding:3px 8px;border:1px solid var(--line);color:var(--ink-soft);}
+  .exp-tag.dep{border-color:var(--gold);color:var(--gold);}
+  .exp-legend.warn{color:#B3261E;}
   .exp-legend{font-size:13px;color:var(--ink-soft);letter-spacing:.04em;margin:6px 0 0;}
   .room-tile .rt-name{font-size:12px;color:var(--ink);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 4px;}
   .room-grid.with-names{grid-template-columns:repeat(auto-fill,minmax(132px,1fr));}
@@ -404,12 +407,15 @@
       <div class="stat-row">
         <div class="stat"><b id="statRooms">0</b><span>stanze presenti</span></div>
         <div class="stat"><b id="statExpected">0</b><span>stanze attese</span></div>
+        <div class="stat"><b id="statStay">—</b><span>fermate</span></div>
+        <div class="stat"><b id="statDep">—</b><span>partenze</span></div>
       </div>
 
       <div class="log-title log-title-row">
         <span>Stanze attese</span>
         <button class="names-btn" id="namesBtn" hidden>Mostra nomi</button>
       </div>
+      <div class="exp-legend" id="rosterInfo"></div>
       <ul class="exp-list" id="roomGrid"></ul>
 
       <div class="log-title" style="margin-top:20px;">Ingressi recenti</div>
@@ -551,30 +557,42 @@
   var ROSTER = {};       // stanza -> {max, lang}
   var ROSTER_DATE = null;
   var ROSTER_SOURCE = 'fallback';
+  var ROSTER_GENERATED = null; // quando l'elenco è stato letto da La Scatola (ISO UTC)
   var ROSTER_NOMI_ENC = null; // nomi prenotanti cifrati (solo tablet Sala)
   var NOMI = {};              // stanza -> "Cognome Nome", in chiaro solo in memoria
   /* Roster incorporato: rende il file autosufficiente (funziona anche
      scaricato e aperto dal computer). Se accanto all'HTML c'è un
      roster.json di oggi più recente, vince quello. Non modificare a mano
      il blocco tra i marcatori: viene riscritto dall'aggiornamento automatico. */
-  /*ROSTER_EMBED_START*/const ROSTER_EMBEDDED = {"date":"2026-10-01","property":"Alpstay – Smart Hotel Saslong","source":"La Scatola","rooms":{"213":{"max":2,"lang":"en"},"209":{"max":2,"lang":"en"},"204":{"max":2,"lang":"en"},"206":{"max":3,"lang":"en"},"208":{"max":2,"lang":"en"},"303":{"max":2,"lang":"en"},"306":{"max":2,"lang":"he"},"408":{"max":2,"lang":"en"},"103":{"max":1,"lang":"en"},"105":{"max":1,"lang":"en"},"107":{"max":1,"lang":"en"},"109":{"max":2,"lang":"es"},"111":{"max":2,"lang":"es"},"113":{"max":2,"lang":"en"},"114":{"max":2,"lang":"en"},"203":{"max":2,"lang":"en"},"207":{"max":2,"lang":"pt"},"210":{"max":2,"lang":"es"},"301":{"max":2,"lang":"en"},"302":{"max":2,"lang":"de"},"304":{"max":1,"lang":"de"},"308":{"max":1,"lang":"en"},"406":{"max":1,"lang":"en"},"102":{"max":3,"lang":"en"},"104":{"max":3,"lang":"en"},"106":{"max":3,"lang":"en"},"112":{"max":4,"lang":"en"},"201":{"max":2,"lang":"pt"},"211":{"max":2,"lang":"en"},"212":{"max":2,"lang":"en"},"214":{"max":2,"lang":"en"},"291":{"max":3,"lang":"en"},"305":{"max":2,"lang":"en"},"403":{"max":1,"lang":"en"}},"names_enc":{"alg":"AES-GCM/PBKDF2-SHA256","iter":250000,"salt":"WkFSazgyc2e0mqm+7V5DeQ==","iv":"qPSOVBw7aw/rfYo/","ct":"utGrTK6S7FxxjOGg3GGaGzKyd6NjySsTLSfW7NcjHP9AFzz9rEz3yjsHu/LmP74tCcL4X5S0uU/PIYZOgeN3s1RNhY97qLZb2JZfUOuvKDJi2LuR5mXmNEgOugYgixLbbOQCBPAqChPkEHTPdoXMj8dKSoZ1IKKRXe1mD9DPL4LPkftvTA9tYAoXHmM7jrTlRRByXL+M9USJgnyGbT0wxKpn1ZYsSwrnaJW8jNkRHKviJumJ6l+wYY1iSd0Zgmmam5VesZYtYyeZ1HUS7jg2oG86ojZxXBVoYS4Wx6VimLQeFnZ1OmFES2utsreRohcvR0c20mQNDSgeJ7hWCLFu4me6iT//4uuVZzqvNWVrhT8FxmQByamT6mgd1lHH2FAqkUG8y7INVAPx+qO2ezsMM2B4dzmsvpLEztvn+amZKuLBTLOz22spMCaKSTqhBiiZei76ZI9SzCR5th8oDkKOn189O6K041uM/XXSrekeKK8KNIq7T2dYYJCl/KsS1tNrNnr0PngN57MdQhJe3ERHys/BGYjbgXVp6KULcXNgpDEOmo57FiDR0f6hXLXxosiiTfDCICparLXZsVtmLFJkWnaMUhpwNp2FFsdaQCtBfgFvLL/ZsMNmqWPVbBYt8Yze1VgXTcPexDiIXuRiNumwnqgq944xEVCAiFNQ6vY5UpdYLGGOEXe8UXAnLXwoZfmYMjsfTJ7HItTzA65Sp8z14PlS/XUlyMDbalZ9VB4TpqGdaP2111ZTs5Xzgy8nCuBfkJvKxhcwh3aTxQQbE+RdCczMqElGhvjWuN3lCVgMs5/OkRaJVT4xcUIPGSWZzTGFa+7Naoe6d2biAvYSGK3yGuo4FwDIYk0kvSi6qwfUvR6UFbn3/M6Ocm274exeuGSM4tfdQeopX8oxJN2XKuEc/HrxnRTW2/35I7iHf7Epd/x7CPs1UoRa8rDeD+DS3aSmXXnuxGdSYfZ5cz5PLsdUo1SCa0Y7lMQ1Qz6ZNPbWtdL7TQ4kLBKKJ8/kjAnxq2xx0LBLkygzXZuJYOVmqoIi8mxZfn/0yWUQ37yJA2OEZ+D6hbAleDNaKMp/I/uFbw=="}};/*ROSTER_EMBED_END*/
+  /*ROSTER_EMBED_START*/const ROSTER_EMBEDDED = {"property":"Alpstay – Smart Hotel Saslong","source":"La Scatola","generated":"2026-10-02T09:22:58Z","days":{"2026-10-02":{"rooms":{"101":{"max":1,"lang":"de","dep":false},"102":{"max":1,"lang":"it","dep":false},"103":{"max":1,"lang":"en","dep":true},"104":{"max":1,"lang":"de","dep":false},"105":{"max":1,"lang":"en","dep":true},"106":{"max":2,"lang":"en","dep":false},"107":{"max":1,"lang":"en","dep":true},"108":{"max":1,"lang":"it","dep":false},"109":{"max":2,"lang":null,"dep":false},"110":{"max":1,"lang":"it","dep":false},"111":{"max":2,"lang":"de","dep":false},"112":{"max":4,"lang":"en","dep":false},"113":{"max":1,"lang":"de","dep":false},"114":{"max":1,"lang":"fr","dep":false},"201":{"max":2,"lang":"fr","dep":false},"202":{"max":1,"lang":"it","dep":false},"203":{"max":2,"lang":"it","dep":false},"204":{"max":2,"lang":"de","dep":false},"205":{"max":2,"lang":"en","dep":false},"206":{"max":1,"lang":"en","dep":false},"207":{"max":2,"lang":"de","dep":false},"208":{"max":2,"lang":"zh","dep":true},"209":{"max":2,"lang":"it","dep":false},"210":{"max":1,"lang":"en","dep":false},"211":{"max":2,"lang":"de","dep":false},"212":{"max":2,"lang":"en","dep":false},"213":{"max":2,"lang":"it","dep":false},"214":{"max":2,"lang":"en","dep":false},"291":{"max":3,"lang":"en","dep":true},"301":{"max":2,"lang":"de","dep":false},"302":{"max":1,"lang":"en","dep":false},"303":{"max":2,"lang":"en","dep":false},"304":{"max":2,"lang":"it","dep":false},"305":{"max":1,"lang":"it","dep":false},"306":{"max":2,"lang":"it","dep":false},"307":{"max":2,"lang":"en","dep":false},"308":{"max":1,"lang":"en","dep":true},"309":{"max":2,"lang":"en","dep":false},"310":{"max":2,"lang":"it","dep":false},"311":{"max":1,"lang":"it","dep":false},"312":{"max":2,"lang":"it","dep":false},"313":{"max":2,"lang":"fr","dep":false},"314":{"max":2,"lang":"it","dep":false},"401":{"max":1,"lang":"de","dep":false},"403":{"max":1,"lang":"en","dep":true},"406":{"max":1,"lang":"en","dep":true},"407":{"max":2,"lang":"en","dep":true},"408":{"max":2,"lang":"it","dep":false}},"names_enc":{"alg":"AES-GCM/PBKDF2-SHA256","iter":250000,"salt":"qhw55Q7dT0bhCKXYimjATQ==","iv":"aoyVUqtMhaVcLW+q","ct":"/vuKh78s3P51Bc3BbTEek8JYhOF2VUyulY8xfcpTFbE4qCZvJlDicAsE/0PIJIZh2iLTgyCr3CqS2QLwFwgZtqswt+zvA4Z4jictSyHj+jFF8mng7DQbzFtku89XkizKpwHVzepOgnRGxKkzpCObcD1W3XfpKLfblNqy9ugh2eG+SLCUUq4sTqMIJHgY8YDe9QIEETVCNuFChmcbj/XPs6fapJr/0VzgVtezypWSpnCXRf94I4URStcM3t3n6Q9gFgX4XmZZOx13OQg3GFNRc8Me88bCt1uKOt5IQJOXTMix0Bco/8sPKhdzXqOu/ZBF5KjJ6FuCbv8ua7rmho3HsV4SUFeXJSGUWfMtZCpV5A8iKVzHJ1JH2gtojoWqXs6lRH4g6/zvj20NicvKkyDzQajOWR1Z41nPOgFDe1ZyTht2UqYHwTSh/qWdVTv2LId/6rEMl95hpBvyP2kYBS+zZGQn4kDlVYo1f2diDiCE8EXQMT+M/dD4jD/WLDgClvd2fZp3wUlT48QFu8oh//KhoFqR1yjBb1B/8CSzzKoanLZ9KrPR/HRxi9XWLmbiGyOauOR2BkxzyzQ3rS+OLrT9DisGX1w7uSVVqD1GpD8m6SQX6oNO+QVIVfYhgXKcvYwpYc8Hb1s/LMDqPhj2zwJwJ0CiepzCkyw9RItv79o7ckc8fyMtsz5o1ZxphZ6HX3y5G1dl/WStsB7py6HDkq4ZoKb0ykvmM0RNKh20Vd5cii93TrdeJDx1CxZv6+jaEOhLIowJPu9CO/yEVj1BwqJgOlnH7a+YrtWRZ8STa/eMrDn60A+0SF0eJTnqD6OXcMtsEOK+xl5Of9euUVEkfvjhI2WHMZTThWDmuGT6lu9rGp1sv6Ssq5KIdv2/GTKD2a1LfXSaw9n4YYJR8wpBUGExhKT/k1HTTiL7MOe9KgCIus14y3NnaxPTFDBfc/J0fOKG0M4w6c+Gl9VegzYrRl7aVXPyqkBbMSSvapOY3DG5kOspU3pULaz4e3NTUsiQSL/ZIcuRECvY9eCQxsvDj6mpa6GfMPyQSBP8Gz/1yZcJFdBCeVob++rjy4PBH4iDllLDOu31Lp86aF4i4yNXpMawUGU87KT2NQvb3ulEOf0XhbGqFgpa7ojwzr1tjNaWcBDgcIxVGeg3dKX6M4D6vluSMY5lCoJuakuYKgf1T39NXKe+Ej8pfjkDE9jmhkadZj49zRRxU/JlXiFzoYBRkrdJwvXhSEftoTsssVpiY6DzDROO4+/w2l90adPNO4qaDGDpxofbQGf7dsFhV2Z1O7Vq888vUnaDoNEvYExWB/sbNEBmkIMJ/+bSH6TuI20rZUY="}},"2026-10-03":{"rooms":{"101":{"max":1,"lang":"de","dep":false},"102":{"max":1,"lang":"it","dep":false},"103":{"max":2,"lang":null,"dep":false},"104":{"max":1,"lang":"de","dep":false},"106":{"max":2,"lang":"en","dep":false},"107":{"max":1,"lang":null,"dep":true},"108":{"max":1,"lang":"it","dep":false},"109":{"max":2,"lang":null,"dep":false},"110":{"max":1,"lang":"it","dep":false},"111":{"max":2,"lang":"de","dep":false},"112":{"max":4,"lang":"en","dep":true},"113":{"max":1,"lang":"de","dep":false},"114":{"max":1,"lang":"fr","dep":false},"201":{"max":2,"lang":"fr","dep":false},"202":{"max":1,"lang":"it","dep":false},"203":{"max":2,"lang":"it","dep":false},"204":{"max":2,"lang":"de","dep":false},"205":{"max":2,"lang":"en","dep":true},"206":{"max":1,"lang":"en","dep":false},"207":{"max":2,"lang":"de","dep":false},"208":{"max":2,"lang":null,"dep":true},"209":{"max":2,"lang":"it","dep":false},"210":{"max":1,"lang":"en","dep":false},"211":{"max":2,"lang":"de","dep":false},"212":{"max":2,"lang":"en","dep":false},"213":{"max":2,"lang":"it","dep":false},"214":{"max":2,"lang":"en","dep":false},"291":{"max":4,"lang":null,"dep":true},"301":{"max":2,"lang":"de","dep":false},"302":{"max":1,"lang":"en","dep":false},"303":{"max":2,"lang":"en","dep":true},"304":{"max":2,"lang":"it","dep":false},"305":{"max":1,"lang":"it","dep":false},"306":{"max":2,"lang":"it","dep":false},"307":{"max":2,"lang":"en","dep":true},"309":{"max":2,"lang":"en","dep":true},"310":{"max":2,"lang":"it","dep":false},"311":{"max":1,"lang":"it","dep":false},"312":{"max":2,"lang":"it","dep":false},"313":{"max":2,"lang":"fr","dep":false},"314":{"max":2,"lang":"it","dep":false},"401":{"max":1,"lang":"de","dep":false},"403":{"max":1,"lang":null,"dep":false},"406":{"max":2,"lang":null,"dep":false},"407":{"max":2,"lang":null,"dep":false},"408":{"max":2,"lang":"it","dep":false}},"names_enc":{"alg":"AES-GCM/PBKDF2-SHA256","iter":250000,"salt":"J6iVF167yfpbVZJUNl307Q==","iv":"ERS+vpgtmGVErTFq","ct":"j/WhZpfyHe/vxKiqReRHEZw/fGDAkGg0QXa9Lfwi0bn3I5gNHK6/kyYNO6RobuEOLB5Y/yxGCpj1TkiWGyrT+OHoKjp1HoCWbpEkPZcJ19umV3hxqN3CuHvI2RN/dlFU4BVLFWOSmocyF7y7x17ssgDb1QxahflGMb63Y4FU++cU4Oqnb1aM1071g7UhcK+4UmN+KxhHjg7hpnl7KjUPNuVNhqnMWfbV4qUr4h4U+aVhdknJUdWrpsetc+SOd0sq7oUuX7punnhWz40dfrryW7DsjQ0zcPz8EOUZwCLmvb7qSRTrb7HbBdWQ3whYwk0YbaO2peYcAyISQDp05Au+Nz3hcWdW8Y3pFAyu0tTQuZ39lojxs+weULVZEVuAB4REw+YJMm2Ku5rrATO23Xz1O5gXB/GcTfilDC0HkBeWwW5iaN+elR7J1cKb0OCliaU/OgWN+rgwCbqyKgaNLn3Z+kGOR8V34sy7PK/hOH4MXf8WEXk6sfHAxeDPULyfFnandoRXo0eJ5myrH5tTsZhJv8AGdTKIWgYe/XLxJYKN3kPOIoufgQMAIyLNgRvb6HpXWYOS0oilzk4WMDa5pZA3LgHbNnY5PVlG94k4Ft6WjNVkszZWKqoJoLXNtolUooDi9zwaWEKe1lYkGtxBrAJzn/iPn1T5dIqlKZoj2od0JEGsIHjy/skarm86OT/VIl0mg1q76H2bCAYuQ2+W7CWcshZlJkt6ZNBTtfnNf6D8zNVlz4IGfekkHZDjPa1gxL07bwaSEkEMduGomV8vY/Gzuxfjvi0pt+LwtGub/8u11NUHuoX+HqbwxiXJGxxnTOhSGLvX0k2TxWVg75gmxLnI8nPrbTI4bHJvcYw4vB2f4wKerx0kIQm6nhnur1inJeyA9P2LgTTmyuuhPLfPa8mhjlpQo/3nO6QdSCDOGcnhGQccLJcK1vtoGNRZFPyf2q6G1yfX+gjseYe7ZGoko96X86lJ/ORI0Iui/XT5sj5wI3KmTHZbPieELEKCs0I4ZLo93NhYT7T2AJZzeicrH3yZFAST5gaydoIf9MlElkdIAzUVJLbEZK0idNU70ZqUliGawq0R+2x3hXhuKDPkqw=="}},"2026-10-04":{"rooms":{"101":{"max":1,"lang":"de","dep":true},"102":{"max":1,"lang":"it","dep":true},"103":{"max":2,"lang":null,"dep":true},"104":{"max":1,"lang":"de","dep":true},"105":{"max":2,"lang":null,"dep":true},"106":{"max":2,"lang":"en","dep":true},"107":{"max":2,"lang":null,"dep":false},"108":{"max":1,"lang":"it","dep":true},"109":{"max":2,"lang":null,"dep":false},"110":{"max":1,"lang":"it","dep":true},"111":{"max":2,"lang":"de","dep":true},"113":{"max":1,"lang":"de","dep":true},"114":{"max":1,"lang":"fr","dep":true},"201":{"max":2,"lang":"fr","dep":true},"202":{"max":1,"lang":"it","dep":true},"203":{"max":2,"lang":"it","dep":true},"204":{"max":2,"lang":"de","dep":true},"205":{"max":2,"lang":null,"dep":false},"206":{"max":1,"lang":"en","dep":true},"207":{"max":2,"lang":"de","dep":true},"208":{"max":3,"lang":null,"dep":false},"209":{"max":2,"lang":"it","dep":true},"210":{"max":1,"lang":"en","dep":true},"211":{"max":2,"lang":"de","dep":true},"212":{"max":2,"lang":"en","dep":true},"213":{"max":2,"lang":"it","dep":true},"214":{"max":2,"lang":"en","dep":false},"301":{"max":2,"lang":"de","dep":true},"302":{"max":1,"lang":"en","dep":true},"303":{"max":2,"lang":null,"dep":true},"304":{"max":2,"lang":"it","dep":true},"305":{"max":1,"lang":"it","dep":true},"306":{"max":2,"lang":"it","dep":true},"307":{"max":2,"lang":null,"dep":false},"308":{"max":3,"lang":null,"dep":false},"309":{"max":2,"lang":null,"dep":false},"310":{"max":2,"lang":"it","dep":true},"311":{"max":1,"lang":"it","dep":true},"312":{"max":2,"lang":"it","dep":true},"313":{"max":2,"lang":"fr","dep":true},"314":{"max":2,"lang":"it","dep":true},"401":{"max":1,"lang":"de","dep":true},"403":{"max":1,"lang":null,"dep":false},"406":{"max":2,"lang":null,"dep":true},"407":{"max":2,"lang":null,"dep":true},"408":{"max":2,"lang":"it","dep":true}},"names_enc":{"alg":"AES-GCM/PBKDF2-SHA256","iter":250000,"salt":"sFVVdc/Yjnho76Oz+MwCCw==","iv":"IOead5qv4Fo4/quV","ct":"bohwhCYDRWowMh03ujscL3pKBX5EzqyUFgEAKRGcG/TdtpcfKEieNMGNcd1DFbrS41/DPU6UhWM2woPdqthBs/fMokg5cFSIT65D6h+4LGUNtrK5Q0KDJLHSxZ27PililZZQi2hylufRmQplH1fkrk8pxiXlcF+SG/SiNy9wclsfwJ2x2N705ky8Aryp6Cw+/OP6luuGR/Hiq6ceP29X13Ih37wbrXmzDICdZroRrgIbcmPjplb75eMfTqgEZ3Hcqcl24cyVt3W7Ipkrj2LGoI3A4yKPPVxJL43XfZM1wYPZ9/HANzt3yzY3jbhhLBA+AeNTnvUaRKF9HY2tt0938ss4mFVhhkcn6JVEhAG+eQwa7qMfQWGkoLvCoVELp1YogBZc913wKuXg8zrr+RQQmuy/so0EZo8+z69Gs3+H52QIRZCdtp8MM25iiPR9sgLf9QMNobJdFD1YI8sBZhzi9XQyniSSR9kSVUpvzw3q1/AZuuXBWA/9IVAZHhbmEnhUomyHcRX7BrTIg6H+kpoGGXPCCfCL6Dpy/KIVf6kwLW1J2IsEwcvi84w6atuZ/ZGkOCIo+0aJiMx7DqHeLBq0gYOyrjcYzDqUoTCICurYT7aNcSxyNAxCOJD8OL9oTDIp/xFGu9DViL//vLE6unaBwKBRR5Xlq4E3kbbmfSJ0a9tZ/mBpTerKMZ3k9r4e/kiciypv5JySD2wRrTu3CuEid40Ml6vS73Xvg3SFEt742O2cQBz5hNVSye738WesJqFpHxI0rAqsr/Y0fOsAGItinCgTLYLPzlbZHE/q39v2ezPUxhmPQqTPOORSFI5ThjGaJZs4YIHPW0WzldyPGjdoFAlL1Oh/Ixs2mD8cDa+pG77UVQzhnVrmQWxxWa0i5iOv65xuN3gjJEVABJdF+kEOVoddn6pR5+ZYohe/SXf2vd4yfxjpqu4gTCU+UBe1zvtJYG7+"}}}};/*ROSTER_EMBED_END*/
 
+  // Il roster può contenere più giorni: { generated, days: { "2026-10-02": {rooms, names_enc}, ... } }
+  // (formato vecchio a giorno singolo ancora accettato). Restituisce il giorno di oggi o null.
+  function giornoDi(j, oggi){
+    if(!j) return null;
+    if(j.days && j.days[oggi]) return { rooms:j.days[oggi].rooms, names_enc:j.days[oggi].names_enc, generated:j.generated||null };
+    if(j.date===oggi) return { rooms:j.rooms, names_enc:j.names_enc, generated:j.generated||null };
+    return null;
+  }
   async function caricaRoster(){
     var oggi = todayKey(), scelto = null;
     try{
       var res = await fetch('roster.json', {cache:'no-store'});
-      if(res.ok){ var j = await res.json(); if(j && j.date===oggi) scelto = j; }
+      if(res.ok) scelto = giornoDi(await res.json(), oggi);
     }catch(e){ /* file:// o file assente: si usa il roster incorporato */ }
-    if(!scelto && ROSTER_EMBEDDED && ROSTER_EMBEDDED.date===oggi) scelto = ROSTER_EMBEDDED;
+    var inc = giornoDi(ROSTER_EMBEDDED, oggi);
+    // tra file accanto e incorporato vince il più recente
+    if(inc && (!scelto || String(inc.generated||'') > String(scelto.generated||''))) scelto = inc;
     if(scelto){
       var encPrima = ROSTER_NOMI_ENC && ROSTER_NOMI_ENC.ct;
       ROSTER = scelto.rooms || {};
-      ROSTER_DATE = scelto.date;
+      ROSTER_DATE = oggi;
       ROSTER_SOURCE = 'scatola';
+      ROSTER_GENERATED = scelto.generated;
       ROSTER_NOMI_ENC = scelto.names_enc || null;
       if(ROSTER_NOMI_ENC && ROSTER_NOMI_ENC.ct!==encPrima) NOMI = {};
     } else {
-      ROSTER = {}; ROSTER_DATE = null; ROSTER_SOURCE = 'fallback'; ROSTER_NOMI_ENC = null; NOMI = {};
+      ROSTER = {}; ROSTER_DATE = null; ROSTER_SOURCE = 'fallback'; ROSTER_GENERATED = null; ROSTER_NOMI_ENC = null; NOMI = {};
       console.info('Nessun elenco ospiti di oggi: uso la mappa stanze di riserva.');
     }
   }
@@ -824,6 +842,8 @@
   var totalNum=document.getElementById('totalNum'),
       statRooms=document.getElementById('statRooms'),
       statExpected=document.getElementById('statExpected'),
+      statStay=document.getElementById('statStay'), statDep=document.getElementById('statDep'),
+      rosterInfo=document.getElementById('rosterInfo'),
       logEl=document.getElementById('log'),
       roomGridEl=document.getElementById('roomGrid'),
       dashDate=document.getElementById('dashDate');
@@ -882,12 +902,25 @@
     var stanzeRoster=Object.keys(ROSTER);
     var stanzeExtra=Object.keys(presenti).filter(function(r){ return stanzeRoster.indexOf(r)<0; });
     statExpected.textContent = stanzeRoster.length || '—';
+    var nDep = stanzeRoster.filter(function(r){ return ROSTER[r].dep; }).length;
+    statDep.textContent  = stanzeRoster.length ? nDep : '—';
+    statStay.textContent = stanzeRoster.length ? (stanzeRoster.length-nDep) : '—';
+    var attese = stanzeRoster.reduce(function(s,r){ return s+(ROSTER[r].max||0); },0);
+    if(stanzeRoster.length){
+      var quando = '';
+      if(ROSTER_GENERATED){ var g=new Date(ROSTER_GENERATED); quando=' · dati La Scatola del '+g.toLocaleDateString('it-IT',{day:'numeric',month:'short'})+', '+fmtTime(g.getTime()); }
+      rosterInfo.textContent = attese+' persone attese'+quando;
+      rosterInfo.classList.remove('warn');
+    } else {
+      rosterInfo.textContent = 'Elenco ospiti di oggi non disponibile: l\'app usa l\'elenco stanze generico.';
+      rosterInfo.classList.add('warn');
+    }
 
     var byNum=function(a,b){ return Number(a)-Number(b); };
     var ordine=stanzeRoster.slice().sort(byNum).concat(stanzeExtra.sort(byNum));
     var CHECK='<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
     if(ordine.length===0){
-      roomGridEl.innerHTML='<li class="log-empty">Elenco di oggi non ancora caricato (manca roster.json di oggi)</li>';
+      roomGridEl.innerHTML='<li class="log-empty">Nessun elenco ospiti per oggi</li>';
     } else {
       roomGridEl.innerHTML = ordine.map(function(r){
         var inRoster = stanzeRoster.indexOf(r)>=0;
@@ -896,8 +929,9 @@
         var cls = 'exp-row' + (cnt>0?' in':'') + (max>0&&cnt>=max?' full':'') + (inRoster?'':' extra');
         var cntTxt = cnt>0 ? (max>0 ? cnt+'<small>/ '+max+'</small>' : String(cnt)) : (max>0 ? '0<small>/ '+max+'</small>' : '');
         var nome = NOMI[r] ? esc(NOMI[r]) : '';
+        var tag = !inRoster ? '' : (ROSTER[r].dep ? '<span class="exp-tag dep">Partenza</span>' : '<span class="exp-tag">Fermata</span>');
         return '<li class="'+cls+'"><span class="exp-check">'+CHECK+'</span><span class="exp-nr">'+r+'</span>'+
-               '<span class="exp-name">'+nome+'</span><span class="exp-cnt">'+cntTxt+'</span></li>';
+               '<span class="exp-name">'+nome+'</span>'+tag+'<span class="exp-cnt">'+cntTxt+'</span></li>';
       }).join('');
     }
     namesBtn.hidden = !ROSTER_NOMI_ENC || Object.keys(NOMI).length>0;
