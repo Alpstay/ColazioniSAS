@@ -1,274 +1,28 @@
 {
  "property": "Alpstay – Smart Hotel Saslong",
  "source": "La Scatola",
- "generated": "2026-10-12T03:45:36Z",
+ "generated": "2026-10-13T03:44:57Z",
  "days": {
-  "2026-10-12": {
-   "rooms": {
-    "101": {
-     "max": 2,
-     "lang": "en",
-     "dep": true
-    },
-    "102": {
-     "max": 2,
-     "lang": "en",
-     "dep": true
-    },
-    "103": {
-     "max": 2,
-     "lang": "ar",
-     "dep": true
-    },
-    "104": {
-     "max": 2,
-     "lang": "it",
-     "dep": true
-    },
-    "105": {
-     "max": 2,
-     "lang": "en",
-     "dep": false
-    },
-    "106": {
-     "max": 2,
-     "lang": "en",
-     "dep": false
-    },
-    "107": {
-     "max": 2,
-     "lang": "en",
-     "dep": false
-    },
-    "108": {
-     "max": 3,
-     "lang": "de",
-     "dep": true
-    },
-    "109": {
-     "max": 2,
-     "lang": "es",
-     "dep": true
-    },
-    "110": {
-     "max": 3,
-     "lang": "de",
-     "dep": true
-    },
-    "111": {
-     "max": 2,
-     "lang": "es",
-     "dep": true
-    },
-    "112": {
-     "max": 4,
-     "lang": "de",
-     "dep": true
-    },
-    "113": {
-     "max": 2,
-     "lang": "es",
-     "dep": true
-    },
-    "114": {
-     "max": 1,
-     "lang": "en",
-     "dep": false
-    },
-    "201": {
-     "max": 1,
-     "lang": "en",
-     "dep": true
-    },
-    "202": {
-     "max": 3,
-     "lang": "en",
-     "dep": false
-    },
-    "203": {
-     "max": 2,
-     "lang": "en",
-     "dep": true
-    },
-    "204": {
-     "max": 2,
-     "lang": "en",
-     "dep": false
-    },
-    "205": {
-     "max": 2,
-     "lang": "en",
-     "dep": true
-    },
-    "206": {
-     "max": 2,
-     "lang": "en",
-     "dep": false
-    },
-    "207": {
-     "max": 2,
-     "lang": "it",
-     "dep": false
-    },
-    "208": {
-     "max": 2,
-     "lang": "en",
-     "dep": false
-    },
-    "209": {
-     "max": 2,
-     "lang": "it",
-     "dep": false
-    },
-    "210": {
-     "max": 2,
-     "lang": "en",
-     "dep": true
-    },
-    "211": {
-     "max": 2,
-     "lang": "en",
-     "dep": false
-    },
-    "212": {
-     "max": 2,
-     "lang": "en",
-     "dep": false
-    },
-    "213": {
-     "max": 2,
-     "lang": "pt",
-     "dep": true
-    },
-    "214": {
-     "max": 2,
-     "lang": "en",
-     "dep": false
-    },
-    "301": {
-     "max": 2,
-     "lang": "ko",
-     "dep": false
-    },
-    "302": {
-     "max": 2,
-     "lang": "en",
-     "dep": false
-    },
-    "303": {
-     "max": 2,
-     "lang": "en",
-     "dep": true
-    },
-    "304": {
-     "max": 1,
-     "lang": "en",
-     "dep": false
-    },
-    "305": {
-     "max": 2,
-     "lang": "en",
-     "dep": true
-    },
-    "306": {
-     "max": 1,
-     "lang": "en",
-     "dep": false
-    },
-    "307": {
-     "max": 2,
-     "lang": "ar",
-     "dep": false
-    },
-    "308": {
-     "max": 3,
-     "lang": "en",
-     "dep": false
-    },
-    "309": {
-     "max": 2,
-     "lang": "en",
-     "dep": true
-    },
-    "310": {
-     "max": 2,
-     "lang": "pt",
-     "dep": false
-    },
-    "311": {
-     "max": 2,
-     "lang": "en",
-     "dep": true
-    },
-    "312": {
-     "max": 2,
-     "lang": "en",
-     "dep": true
-    },
-    "313": {
-     "max": 2,
-     "lang": "en",
-     "dep": false
-    },
-    "314": {
-     "max": 2,
-     "lang": "pl",
-     "dep": false
-    },
-    "401": {
-     "max": 2,
-     "lang": "pt",
-     "dep": true
-    },
-    "403": {
-     "max": 1,
-     "lang": "de",
-     "dep": true
-    },
-    "406": {
-     "max": 2,
-     "lang": "en",
-     "dep": false
-    },
-    "407": {
-     "max": 2,
-     "lang": "it",
-     "dep": false
-    },
-    "408": {
-     "max": 2,
-     "lang": "zh",
-     "dep": true
-    }
-   },
-   "names_enc": {
-    "alg": "AES-GCM/PBKDF2-SHA256",
-    "iter": 250000,
-    "salt": "JYNZbs+sxi6zWCIk7ObrfA==",
-    "iv": "AZp+Wrlh9+BPLTn0",
-    "ct": "baog9SeahAjRTcg8bkE0MK+0ZxUYmdFWU02fGM5Y5nHtbsnroUxGzn6hdOX5eQJ7CxQMfnVI27UQdyGfLKSjGFok8qs/i0FbSg0bCZRA85a7q4Z6n5nrcsLp+RoBuZ54WlNQe05L/CFanLyWi7s2MLpeWncWnNnpNdVnPwvp8rdROQwytcHLhL/XpKLpLyK1rOBVp/UnzP2N/Semxza35aaAst1CEJ7fHzVzGpaWwsJ+KzTCMIJjjZQsMVN9oLFeh36g6IwY8FaaILfJyb9AHH8dA3qcSAWuP+oS3jFQjp2VpttjfCuty+JXDs3T6Wcju+RMQsbgERAmLVDyNfpjweZ0zFtWbpqHl6W4k88kvl5RtMdzHr9w9oG1xEI39p3BAMNlEBtXXFuzzrpetg/1S6dKPWrpfEG9aAg8tuTquTwKRAny/H5Iecd71PF3qmMqpNyb2axlwHQvJVzsaeDHOE4cBbvMcH70huWKyeum3fBUR2xV1UQC7s2eyyeGAXB8eIP4c/dp5DqF4t0yylwWP1WUS1NcigNHcMvEwpvvEewOWQn2jqhh/5367MTmf+7JKwgpnISBu+tkIQR17ngPYn4ZydpwXf1PS8DWpN4z/um1o26Ocuq43X12p8/4UPnwaBQgiQy8NQ15YC8HYRzEma2918voLwo6pmA0dStn13O90GUGWCJ2TC3V6RpvmgLFDLxIzKtCjJKNyZUK5M6Bp3kRFwNh1i6ROC3nBFRnz6iYnUhYiITetSL/Wx3l0K9fA0nIB5x9qEfDu7MbQu+QI8XeWnaUIfaOI5j24ovJBsqUsEVwc2kSsybcJr0PGJPUkV8HEzbsBFWw1xXFOXEjibcrtEg7tBReY6TQ1IuZHnm7YJoYHHfjff5HviR8HfTV5vzaaZKllcrL6JX/FzSzh4gjV6LQ5VKqhH1nWeH16nz2b0aXYPBcv6JA8WTXsCGIHjtCbqLNsiBIfUbasI1CbQoLYCPf6e3WspVOc7GiS3VYNRnwmovQYK+S9Ncy3W48UkLxpEVf4kHuANgILaen8/5kufh70aDGOkLaylp82K6H7vhYqXDEAWAq7A96Lfi1ECvh9YbGi1uNppCjseRLuKbXWfb2PNPjk7cbSwp+rxNzzZLkMZ2yjxaagLsI61GwvnoX6ouZ83vnFp6bb/mYAL7ZFUqVxMm0YZLntr0tZwkK2L4BUA3PIDxT+RSP1atMRBCJBJfA6ybayIAzqeJMbiKTrVW+ARAdPCxtyBY/gmXeV+YQc2/YZ/QSrwYbvNgT6DD8e0vD4OFFtppRezZU/ugIsXbjrDH2FG8GflxiOLAeSoxYbBK5ym/H4QJ3mBjolmg0n8jHFGiT1100mJttdXl0BWvbk9d0yMcpACDjhV8Dboxerrm38SNriSFtX3c/Dw=="
-   }
-  },
   "2026-10-13": {
    "rooms": {
     "101": {
      "max": 2,
-     "lang": null,
+     "lang": "it",
      "dep": true
     },
     "102": {
      "max": 3,
-     "lang": null,
+     "lang": "en",
      "dep": true
     },
     "103": {
      "max": 2,
-     "lang": null,
+     "lang": "en",
      "dep": false
     },
     "104": {
      "max": 3,
-     "lang": null,
+     "lang": "en",
      "dep": false
     },
     "105": {
@@ -288,32 +42,32 @@
     },
     "108": {
      "max": 2,
-     "lang": null,
+     "lang": "en",
      "dep": false
     },
     "109": {
      "max": 2,
-     "lang": null,
+     "lang": "en",
      "dep": true
     },
     "110": {
      "max": 3,
-     "lang": null,
+     "lang": "en",
      "dep": false
     },
     "111": {
      "max": 2,
-     "lang": null,
+     "lang": "en",
      "dep": true
     },
     "112": {
      "max": 4,
-     "lang": null,
+     "lang": "en",
      "dep": true
     },
     "113": {
      "max": 2,
-     "lang": null,
+     "lang": "ko",
      "dep": false
     },
     "114": {
@@ -323,7 +77,7 @@
     },
     "201": {
      "max": 2,
-     "lang": null,
+     "lang": "en",
      "dep": false
     },
     "202": {
@@ -333,7 +87,7 @@
     },
     "203": {
      "max": 2,
-     "lang": null,
+     "lang": "en",
      "dep": false
     },
     "204": {
@@ -343,7 +97,7 @@
     },
     "205": {
      "max": 2,
-     "lang": null,
+     "lang": "en",
      "dep": false
     },
     "206": {
@@ -368,7 +122,7 @@
     },
     "210": {
      "max": 3,
-     "lang": null,
+     "lang": "en",
      "dep": false
     },
     "211": {
@@ -383,7 +137,7 @@
     },
     "213": {
      "max": 2,
-     "lang": null,
+     "lang": "zh",
      "dep": false
     },
     "214": {
@@ -393,7 +147,7 @@
     },
     "291": {
      "max": 3,
-     "lang": null,
+     "lang": "en",
      "dep": true
     },
     "301": {
@@ -408,7 +162,7 @@
     },
     "303": {
      "max": 2,
-     "lang": null,
+     "lang": "de",
      "dep": false
     },
     "304": {
@@ -418,7 +172,7 @@
     },
     "305": {
      "max": 2,
-     "lang": null,
+     "lang": "de",
      "dep": false
     },
     "306": {
@@ -432,13 +186,13 @@
      "dep": false
     },
     "308": {
-     "max": 3,
+     "max": 2,
      "lang": "en",
      "dep": true
     },
     "309": {
      "max": 2,
-     "lang": null,
+     "lang": "en",
      "dep": false
     },
     "310": {
@@ -448,12 +202,12 @@
     },
     "311": {
      "max": 2,
-     "lang": null,
+     "lang": "en",
      "dep": false
     },
     "312": {
      "max": 2,
-     "lang": null,
+     "lang": "en",
      "dep": true
     },
     "313": {
@@ -468,12 +222,12 @@
     },
     "401": {
      "max": 2,
-     "lang": null,
+     "lang": "en",
      "dep": false
     },
     "403": {
      "max": 1,
-     "lang": null,
+     "lang": "it",
      "dep": true
     },
     "406": {
@@ -488,16 +242,16 @@
     },
     "408": {
      "max": 2,
-     "lang": null,
+     "lang": "en",
      "dep": true
     }
    },
    "names_enc": {
     "alg": "AES-GCM/PBKDF2-SHA256",
     "iter": 250000,
-    "salt": "mtkuAJQk1YhMDdeZCiU2cw==",
-    "iv": "9AqWw+etSYcauixn",
-    "ct": "jGAqTb7d3HW2S3NXXnGnNDFiRwoKDif/EF2RMFxERlQMvxBrdHw1nXcAaN/I+V88iUYOqLWYR9mw70uenVadKoYHp0MO/MgFKhZqY/fclm0uEDKoxgVboghuTzxdCuvMdGFHwsNzrgWX6hp+57afiGpukdZbCP80gz3ZnereZ0H0Uq9Uf+fPYSXgb1wj/QtHkpF9JpX0QRD5qyMRRkMSNQvRqKDUS1HSE69JxKFL2fwwnuW4JGOFsuGn1fbZb2ROXcocp37xsFIVxvnCILAUQU+ZhxqNKtGMSGTyLMZ273H7YkJdemYjTbRxexFIvI4C+ORilYd0LoGJsMe2HPhOZQd4pRLneTtcDjGDiDJm4uNcuWlIGXl4tYGbMgfNt7Zlrr6mALEBLsEytQH0Y3IG9Qowrto4Y+3J+nuJxBwKWDOjEketd/85wa7BCO8vVm+FDFAzSSIqzhm+7Sdo45m3FWjrPIaQwlzzYhL04CJo8I/RZNCAj6ZZCSM42s9I+7FTcw+tajtuY/DTP9s34Opt19Pj6bHYCU4tgSigtO3D86zQ7Kuj4rlFIEheiAST7/5e5G9WiJOZ5IJQ+NouKHWpFu3MWpX9FC4yRyPmdOaJBGlR2EF0aBuLKMg2FeyWYQO0rKJTcRYtvA9HytgP9vGxy75iU1v0eojtMA/Ut4Wd8mdkte2WVZ4QVt6XPveQkUtyw7M6CQ=="
+    "salt": "oRl9Pg0EJ41+me/QKkTNpA==",
+    "iv": "FZXoVxP6mq+6Hs/A",
+    "ct": "G6wBufLgZx+RRNI8LKl/nPT0xLS5xyUkpOvkrmBiwQc9em/OIjHDSBLVaZjvWuQZEh2w4KLptd2CmmppiXjhnKjZakrMBX2TVI8bPpnWZ1M8kY79b+blaz5nyXpZKNB57y6mR66P6WvJBl4M8Wmza3NYTKXqskOvJFPMKyyVHU1NgLLCNjKPx8uXUQVnbJmDBLFnKLt48VgCkXwdYxNLA3ObGjxBqRj2h8OzDmFYGeEyItyXSNk4MUm+s7XpjfvNmWeATjoCpL97RvAjxYU33bHk4ur60l/ZLCjNtwTG40ZaOqFZM+ox49s+AjOCm+7MH19b4Dh3Igl14trA627MeeVcDmHXU2X3/+WiK3ps6pmr2j2/IUid+HV+tQdLmoWcSlAOQKfyqeU3OdYqWqWrAcOhRUAdY1EFO32vHHyKhUFAv64P88LHs2N0VFqc5qtK/cVFeRc2/BOMtrkGoAcF4lzOQlc0zC7EHYcQnDQOTkAJfXnOFkuNSFwGmBUxp1qgwnopL9cEuvfXBEZTOdbym7TCmeP4KetWRrg6TrcOCHlyORnpMuymPxNl3/uAl5wRSSu96nbbpfgQWYAhMq1LJAOhSV8Oz0uiPSOtBg7l2e0X+6D/AqRBn8xkz8nIQSWN5G0gco8ZhF1Xkajmo3L0mLdAyS5V175JXYDAB6/4VRY1yTTQOYeTnmVFNAdcdG5U1SPfhirYTG2qeEMvq+d8wa7tFZwuY8EubzoZvULTsTSDyjhm+MCN3ksz/E6ycbz0o5GUk1bEqBgJ2NeYKKvdEAqf9o8yK43l6k2nbYvEQDI+zsD98UdjDQlZH1Rm3Iup9aZLLh4W86HqAgFe3DoX9rJpIJo0QW/TOGP3EGHGVzjyGoXWeEmiHcmDu5n7IBpk0zsP5goCIYKGE5SGilYLSePi/Y5iZbUWBi+OntXSUI2QdWvDsRBCRMqp/p39SxAIbN4i/WjyHxT02e0WLtPR5/1S12HXsR8mxNuoyCl0czrEnCK9rhsmBs7QJUe4G+Mk5g2+trelXzTybwXi45R0FnoXE5o2jqSFzjI6UyI+DPnSlurMlX0/CZg39Yh5SeUMEmbQHp2gpIPh1gI8HLu5y+hgfUQZJt2gupHCUeV93GPqXdWtZABgynRo+LW7TNW8b0JYjC7rZ9Y6rhGPAZUmBJF/7dKR7dh9gYUsdv4NGTaP8McbZw81uDCKO9hQ8D4+PFXSXTAtl8ar8RJEyB7VyUpsYEVh7PaQeP1bdsWh9z0LJ/seNvqNKcG3ezYQvOYZFGqNuFgPTJ99/N2MQrmFGX8UOX9GnhBpQtU2GxY1+/nP2k4mMiYn2cq6AfO61BD8Hld2/+3KbnRW+nGRR/NP12pf7i7NZ8EN"
    }
   },
   "2026-10-14": {
@@ -507,14 +261,19 @@
      "lang": null,
      "dep": false
     },
+    "102": {
+     "max": 3,
+     "lang": null,
+     "dep": true
+    },
     "103": {
      "max": 2,
-     "lang": null,
+     "lang": "en",
      "dep": false
     },
     "104": {
      "max": 3,
-     "lang": null,
+     "lang": "en",
      "dep": true
     },
     "105": {
@@ -529,7 +288,7 @@
     },
     "108": {
      "max": 2,
-     "lang": null,
+     "lang": "en",
      "dep": true
     },
     "109": {
@@ -539,7 +298,7 @@
     },
     "110": {
      "max": 3,
-     "lang": null,
+     "lang": "en",
      "dep": true
     },
     "111": {
@@ -554,7 +313,7 @@
     },
     "113": {
      "max": 2,
-     "lang": null,
+     "lang": "ko",
      "dep": false
     },
     "114": {
@@ -564,7 +323,7 @@
     },
     "201": {
      "max": 2,
-     "lang": null,
+     "lang": "en",
      "dep": true
     },
     "202": {
@@ -574,7 +333,7 @@
     },
     "203": {
      "max": 2,
-     "lang": null,
+     "lang": "en",
      "dep": true
     },
     "204": {
@@ -584,7 +343,7 @@
     },
     "205": {
      "max": 2,
-     "lang": null,
+     "lang": "en",
      "dep": false
     },
     "206": {
@@ -609,7 +368,7 @@
     },
     "210": {
      "max": 3,
-     "lang": null,
+     "lang": "en",
      "dep": true
     },
     "211": {
@@ -624,7 +383,7 @@
     },
     "213": {
      "max": 2,
-     "lang": null,
+     "lang": "zh",
      "dep": true
     },
     "214": {
@@ -649,7 +408,7 @@
     },
     "303": {
      "max": 2,
-     "lang": null,
+     "lang": "de",
      "dep": true
     },
     "304": {
@@ -659,7 +418,7 @@
     },
     "305": {
      "max": 2,
-     "lang": null,
+     "lang": "de",
      "dep": true
     },
     "306": {
@@ -679,12 +438,12 @@
     },
     "309": {
      "max": 2,
-     "lang": null,
+     "lang": "en",
      "dep": false
     },
     "311": {
      "max": 2,
-     "lang": null,
+     "lang": "en",
      "dep": false
     },
     "312": {
@@ -704,7 +463,7 @@
     },
     "401": {
      "max": 2,
-     "lang": null,
+     "lang": "en",
      "dep": false
     },
     "403": {
@@ -713,6 +472,11 @@
      "dep": false
     },
     "406": {
+     "max": 2,
+     "lang": null,
+     "dep": true
+    },
+    "407": {
      "max": 2,
      "lang": null,
      "dep": false
@@ -726,9 +490,250 @@
    "names_enc": {
     "alg": "AES-GCM/PBKDF2-SHA256",
     "iter": 250000,
-    "salt": "A2IgJx+D29P6FInEHsPNAQ==",
-    "iv": "Y5ztJTfbXNnky/Qb",
-    "ct": "ol95EHc5qKGR/n4i6aR9rzLTaFVi7/CgBWxHKtuF5dr2DEWtfI3bb2Nw8cS3P5BVvx1WRZ9RQmyr7LmzM+rfGAI/WsrSsn/gdbX3VEDBZv2eSwVRe2C3gWWHq8Ca0d/WaFQB2u1LvM+WQbXyT9C+v6DuNn089Lv9FdPBaic+IVSbbCSPiOmkp/MzA3XYoYXXEheq52cqQ+bAeBOOdcMhAbntDYouPwng8hbrsuGfghTZyGFdpYyllBseFQyY1jcIRkw3E0KqUO3zAnqOm2R2AqOBsxy9f9gBjrYpYQLoMgY="
+    "salt": "18yNFaKi4s8X6uQUm3HoSQ==",
+    "iv": "AR3TqPTeU1m+dy2j",
+    "ct": "8DETjufDQ/3N4jw38bjtMUVEQ/JMUKkouT4Bq0dC3yJLf+lzl8ge94i0yBIOdGP3X8TfWgBQfcyoMXqpbN2Y9nfOr/RdhMGBlWyaF/NUY+r5XTmt9B1ALlvlRoNuzhTkQW6yPAEN12+P6roeygfehd4r2m1+sq+dFI3JOlql+Usqf02TxR1EJKTrPcXkmzGfTZQ/N8KJJfIpUTcjGb5292RMSOO0hyp2LQFHy2TMV1mZpVc40gBhCJuUXHsPENE4DhHY1tM84HkU1Q+aVaSltHe69VObThX8GBpNwxX76fKscnkAKrNmrblnW4GEZVTmAm0AvDwiPQ6bRrMOO5yEeW7YQdkpIAmXwPKk7hhjRxf5XTbi69tInLMRhWbaRHl71xoR9UFzAmDjv7DPmywcufV7uzQ2/xhj08W6VpqzDsMr6ZgEwBK/cnPpCGXiUp8KSpcRdKeb43j/hmb4WYOIJ9/QDDrbXpgWUvks/FIMywr+NPA6qjnQi6UyjzuzSWKxsw6WkAVn1dzVpSNeIU5NZ9ojZZQobH5uU6kTRzgUTJ3ykVmR/q7b3f85FQNloMiPDZKzfebg7MkIfzNMzjT5Mu1jmNLIWX82+qYHUCsrkHhWI+omQYZgVGPYclIK6B8ozMAG6mXq0bdoYPSfpHt2xav2gRviKfAxnx/X8rd8snIdLTpJ9pbPYtkxlY+DRiHsJJbfiO9DJk/DNe4="
+   }
+  },
+  "2026-10-15": {
+   "rooms": {
+    "101": {
+     "max": 2,
+     "lang": null,
+     "dep": true
+    },
+    "102": {
+     "max": 2,
+     "lang": null,
+     "dep": false
+    },
+    "103": {
+     "max": 2,
+     "lang": "en",
+     "dep": true
+    },
+    "104": {
+     "max": 2,
+     "lang": null,
+     "dep": false
+    },
+    "105": {
+     "max": 2,
+     "lang": null,
+     "dep": false
+    },
+    "106": {
+     "max": 2,
+     "lang": null,
+     "dep": true
+    },
+    "107": {
+     "max": 2,
+     "lang": null,
+     "dep": false
+    },
+    "108": {
+     "max": 3,
+     "lang": null,
+     "dep": false
+    },
+    "109": {
+     "max": 2,
+     "lang": null,
+     "dep": false
+    },
+    "110": {
+     "max": 3,
+     "lang": null,
+     "dep": false
+    },
+    "111": {
+     "max": 1,
+     "lang": null,
+     "dep": false
+    },
+    "112": {
+     "max": 2,
+     "lang": null,
+     "dep": true
+    },
+    "113": {
+     "max": 2,
+     "lang": "ko",
+     "dep": true
+    },
+    "114": {
+     "max": 1,
+     "lang": "en",
+     "dep": true
+    },
+    "201": {
+     "max": 2,
+     "lang": null,
+     "dep": false
+    },
+    "202": {
+     "max": 3,
+     "lang": null,
+     "dep": true
+    },
+    "203": {
+     "max": 2,
+     "lang": null,
+     "dep": false
+    },
+    "204": {
+     "max": 2,
+     "lang": null,
+     "dep": true
+    },
+    "205": {
+     "max": 2,
+     "lang": "en",
+     "dep": true
+    },
+    "206": {
+     "max": 2,
+     "lang": null,
+     "dep": false
+    },
+    "207": {
+     "max": 2,
+     "lang": null,
+     "dep": false
+    },
+    "208": {
+     "max": 3,
+     "lang": null,
+     "dep": false
+    },
+    "209": {
+     "max": 2,
+     "lang": null,
+     "dep": false
+    },
+    "210": {
+     "max": 2,
+     "lang": null,
+     "dep": false
+    },
+    "211": {
+     "max": 2,
+     "lang": null,
+     "dep": false
+    },
+    "212": {
+     "max": 2,
+     "lang": null,
+     "dep": false
+    },
+    "213": {
+     "max": 2,
+     "lang": null,
+     "dep": false
+    },
+    "214": {
+     "max": 2,
+     "lang": null,
+     "dep": false
+    },
+    "301": {
+     "max": 1,
+     "lang": null,
+     "dep": false
+    },
+    "302": {
+     "max": 2,
+     "lang": null,
+     "dep": true
+    },
+    "303": {
+     "max": 1,
+     "lang": null,
+     "dep": false
+    },
+    "304": {
+     "max": 1,
+     "lang": "en",
+     "dep": true
+    },
+    "305": {
+     "max": 2,
+     "lang": null,
+     "dep": false
+    },
+    "306": {
+     "max": 1,
+     "lang": "en",
+     "dep": true
+    },
+    "307": {
+     "max": 2,
+     "lang": null,
+     "dep": false
+    },
+    "308": {
+     "max": 2,
+     "lang": null,
+     "dep": true
+    },
+    "309": {
+     "max": 2,
+     "lang": "en",
+     "dep": true
+    },
+    "311": {
+     "max": 2,
+     "lang": "en",
+     "dep": true
+    },
+    "312": {
+     "max": 2,
+     "lang": null,
+     "dep": true
+    },
+    "313": {
+     "max": 2,
+     "lang": null,
+     "dep": true
+    },
+    "314": {
+     "max": 2,
+     "lang": null,
+     "dep": false
+    },
+    "401": {
+     "max": 2,
+     "lang": "en",
+     "dep": true
+    },
+    "403": {
+     "max": 1,
+     "lang": null,
+     "dep": true
+    },
+    "406": {
+     "max": 2,
+     "lang": null,
+     "dep": false
+    },
+    "407": {
+     "max": 2,
+     "lang": null,
+     "dep": true
+    },
+    "408": {
+     "max": 1,
+     "lang": null,
+     "dep": true
+    }
+   },
+   "names_enc": {
+    "alg": "AES-GCM/PBKDF2-SHA256",
+    "iter": 250000,
+    "salt": "erUhZHxgLiEVOEGpFZ7MKA==",
+    "iv": "ymTrbjVJVT+450d/",
+    "ct": "Jj9zWmV9Uyec44/P0rKkCulIb0JLIC5cjdoNxsnTr9QTtG7TNCQHP6OLxyNxK6a3G8fqaAhiNgP8k0cqHnb0A/J+S+Bd4hL5wTuQdPzkdCVW4aYz7c4Mv30WxMh3QoHZ3w6Rp83cvB/TT9QiZN3B3g511McneLzrcKXd0Gr917atpekY/Ivb0i4HHLRgp4r8IUJojTATGytG9+UDbavnPARxOPjGXJoKeJOG2O4Zt1tMRC0AWNvBzbA73/jCjUxZk3NQPbqeA2tZ8kSG4OAOlQ=="
    }
   }
  }
