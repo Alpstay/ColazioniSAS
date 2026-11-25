@@ -990,6 +990,8 @@
   swD.addEventListener('click',function(){ show('dash'); location.hash='sala'; });
   // Apri direttamente la vista sala con URL che termina in #sala
   if(/sala|dash/i.test(location.hash)) show('dash');
+  // ...anche quando #sala viene aggiunto o tolto nella stessa scheda (il browser non ricarica la pagina)
+  window.addEventListener('hashchange',function(){ show(/sala|dash/i.test(location.hash) ? 'dash' : 'kiosk'); });
 
   /* ---------- schermo intero ---------- */
   var fsBtn=document.getElementById('fsBtn');
